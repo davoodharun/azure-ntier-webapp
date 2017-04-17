@@ -58,6 +58,12 @@
             "properties": {
               "addressPrefix": "[parameters('sqlSubnetPrefix')]"
             }
+          },
+          {
+            "name": "[parameters('adSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('adSubnetPrefix')]"
+            }
           }
         ]
       }

@@ -84,7 +84,7 @@
             "value": "[variables('configuration').vnet.virtualNetworkName]"
           },
           "adSubnetName": {
-            "value": "[variables('configuration').adSubnetName]"
+            "value": "[variables('configuration').vnet.adSubnetName]"
           }
         }
       }
