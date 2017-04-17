@@ -2,7 +2,10 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-
+    "templateBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/"
+    }
   },
   "variables": {
     "configuration": {
@@ -18,8 +21,8 @@
       }
     },
     "templateLinks": {
-      "vnetnew": "[concat(parameters('templateBaseUrl'), vnetnew.json)]",
-      "activeDirectory": "[concat(parameters('templateBaseUrl'), activedirectory.json)]"
+      "vnetnew": "[concat(parameters('templateBaseUrl'), 'vnetnew.json')]",
+      "activeDirectory": "[concat(parameters('templateBaseUrl'), 'activedirectory.json')]"
     }
   },
   "resources": [
@@ -45,19 +48,19 @@
             "value": "[variables('configuration').vnet.mgtSubnetName]"
           },
           "sqlSubnetName": {
-            "value": "[variables('configuration').sqlSubnetName]"
+            "value": "[variables('configuration').vnet.sqlSubnetName]"
           },
           "adSubnetName": {
-            "value": "[variables('configuration').adSubnetName]"
+            "value": "[variables('configuration').vnet.adSubnetName]"
           },
           "mgtSubnetPrefix": {
-            "value": "[variables('configuration').mgtSubnetPrefix]"
+            "value": "[variables('configuration').vnet.mgtSubnetPrefix]"
           },
           "sqlSubnetPrefix": {
-            "value": "[variables('configuration').sqlSubnetPrefix]"
+            "value": "[variables('configuration').vnet.sqlSubnetPrefix]"
           },
           "adSubnetPrefix": {
-            "value": "[variables('configuration').adSubnetPrefix]"
+            "value": "[variables('configuration').vnet.adSubnetPrefix]"
           }
         }
       }

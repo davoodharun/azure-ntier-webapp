@@ -17,11 +17,19 @@
       "type": "string",
       "defaultValue": "sql"
     },
+    "adSubnetName": {
+      "type": "string",
+      "defaultValue": "ad"
+    },
     "mgtSubnetPrefix": {
       "type": "string",
       "defaultValue": "10.0.1.0/24"
     },
     "sqlSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+    "adSubnetPrefix": {
       "type": "string",
       "defaultValue": "10.0.0.0/24"
     }
