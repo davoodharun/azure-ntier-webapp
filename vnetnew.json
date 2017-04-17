@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "type":"string"
+    },
+    "virtualNetworkAddressRange": {
+      "type": "string",
+      "defaultValue": "10.200.0.0/16"
+    },
+    "mgtSubnetName": {
+      "type": "string",
+      "defaultValue": "mgt"
+    },
+    "sqlSubnetName": {
+      "type": "string",
+      "defaultValue": "sql"
+    },
+    "mgtSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24"
+    },
+    "sqlSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('virtualNetworkName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworkAddressRange')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('mgtSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('mgtSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "[parameters('sqlSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('sqlSubnetPrefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {}
+}

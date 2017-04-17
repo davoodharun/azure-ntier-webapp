@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+  },
+  "variables": {
+    "configuration": {
+      "vnet": {
+        "virtualNetworkName": "n-tier-sql-vnet",
+        "virtualNetworkAddressRange": "10.0.0.0/16",
+        "mgtSubnetPrefix": "10.0.0.0/24",
+        "sqlSubnetPrefix": "10.0.1.0/24",
+        "adSubnetPrefix": "10.0.2.0/24",
+        "mgtSubnetName": "mgt",
+        "adSubnetName": "ad",
+        "sqlSubnetName": "sql"
+      }
+    },
+    "templateLinks": {
+      "vnetnew": "[concat(parameters('templateBaseUrl'), vnetnew.json)]",
+      "activeDirectory": "[concat(parameters('templateBaseUrl'), activedirectory.json)]"
+    }
+  },
+  "resources": [
+    {
+      "name": "VirtualNetwork",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('templateLinks').vnetnew]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": {
+            "value": "[variables('configuration').vnet.virtualNetworkName]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[variables('configuration').vnet.virtualNetworkAddressRange]"
+          },
+          "mgtSubnetName": {
+            "value": "[variables('configuration').vnet.mgtSubnetName]"
+          },
+          "sqlSubnetName": {
+            "value": "[variables('configuration').sqlSubnetName]"
+          },
+          "adSubnetName": {
+            "value": "[variables('configuration').adSubnetName]"
+          },
+          "mgtSubnetPrefix": {
+            "value": "[variables('configuration').mgtSubnetPrefix]"
+          },
+          "sqlSubnetPrefix": {
+            "value": "[variables('configuration').sqlSubnetPrefix]"
+          },
+          "adSubnetPrefix": {
+            "value": "[variables('configuration').adSubnetPrefix]"
+          }
+        }
+      }
+    },
+    {
+      "name": "ActiveDirectory",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetwork",
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('templateLinks').activeDirectory]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": {
+            "value": "[variables('configuration').vnet.virtualNetworkName]"
+          },
+          "adSubnetName": {
+            "value": "[variables('configuration').adSubnetName]"
+          }
+        }
+      }
+    }
+  ]
+}
