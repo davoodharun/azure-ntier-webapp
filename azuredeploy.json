@@ -92,6 +92,9 @@
           "adSubnetName": {
             "value": "[variables('configuration').vnet.adSubnetName]"
           },
+          "adSubnetPrefix": {
+            "value": "[variables('configuration').vnet.adSubnetPrefix]"
+          },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
           },
