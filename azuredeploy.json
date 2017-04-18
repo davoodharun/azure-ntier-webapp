@@ -89,6 +89,9 @@
           "virtualNetworkName": {
             "value": "[variables('configuration').vnet.virtualNetworkName]"
           },
+          "virtualNetworkAddressRange": {
+            "value": "[variables('configuration').vnet.virtualNetworkAddressRange]"
+          },
           "adSubnetName": {
             "value": "[variables('configuration').vnet.adSubnetName]"
           },
