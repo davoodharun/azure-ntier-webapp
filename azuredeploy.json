@@ -5,6 +5,12 @@
     "templateBaseUrl": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
     }
   },
   "variables": {
@@ -12,9 +18,9 @@
       "vnet": {
         "virtualNetworkName": "n-tier-sql-vnet",
         "virtualNetworkAddressRange": "10.0.0.0/16",
-        "mgtSubnetPrefix": "10.0.0.0/24",
+        "mgtSubnetPrefix": "10.0.2.0/24",
         "sqlSubnetPrefix": "10.0.1.0/24",
-        "adSubnetPrefix": "10.0.2.0/24",
+        "adSubnetPrefix": "10.0.0.0/24",
         "mgtSubnetName": "mgt",
         "adSubnetName": "ad",
         "sqlSubnetName": "sql"
@@ -85,7 +91,13 @@
           },
           "adSubnetName": {
             "value": "[variables('configuration').vnet.adSubnetName]"
-          }
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
         }
       }
     }
