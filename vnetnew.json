@@ -329,9 +329,6 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
