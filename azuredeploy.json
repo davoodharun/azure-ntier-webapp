@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "templateBaseUrl": {
+    "artifactsLocation": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/"
     },
@@ -15,20 +15,179 @@
   },
   "variables": {
     "configuration": {
-      "vnet": {
+      "network": {
+        "dnsPrefix": "bprintaz",
+        "domainName": "mydomain.local",
         "virtualNetworkName": "n-tier-sql-vnet",
         "virtualNetworkAddressRange": "10.0.0.0/16",
-        "mgtSubnetPrefix": "10.0.2.0/24",
-        "sqlSubnetPrefix": "10.0.1.0/24",
-        "adSubnetPrefix": "10.0.0.0/24",
-        "mgtSubnetName": "mgt",
-        "adSubnetName": "ad",
-        "sqlSubnetName": "sql"
+        "availabilitySets": {
+          "names": {
+            "ad": "adAvailabiltySet",
+            "sql": "sqlAvailabilitySet",
+            "mgt": "mgtAvailabilitySet",
+            "web": "webAvailabilitySet"
+          }
+        },
+        "subnets": {
+          "names": {
+            "mgt": "mgt",
+            "ad": "ad",
+            "sql": "sql",
+            "web": "web"
+          },
+          "ids": {
+
+          },
+          "addressRanges": {
+            "web": "10.0.3.0/24",
+            "mgt": "10.0.2.0/24",
+            "sql": "10.0.1.0/24",
+            "ad": "10.0.0.0/24",
+          }
+        },
+        "networkInterfaces": {
+          "names": {
+            "mgt": "mgt-nic",
+            "adpdc": "adpdc-nic",
+            "adbdc": "adbdc-nic",
+            "sql0": "sql-nic0",
+            "sql1": "sql-nic1",
+            "sqlw": "sql-nicw",
+            "web": "web-nic"
+          }
+        },
+        "privateIPAddresses": {
+          "mgt": "10.0.2.4",
+          "adpdc": "10.0.0.4",
+          "adbdc": "10.0.0.5",
+          "sql1": "10.0.1.0.4",
+          "sql0": "10.0.1.0.5",
+          "sqlw": "10.0.1.0.6",
+          "sqlLB": "10.0.1.0.7",
+          "web": "web"
+        }
+      },
+      "storageAccounts": {
+        "names": {
+          "vhdStorageAccountNameAD": "[concat(uniquestring(resourceGroup().id), 'ad')]",
+          "vhdStorageAccountNameSQL": "[concat(uniquestring(resourceGroup().id), 'sql')]",
+          "vhdStorageAccountNameSQLW": "[concat(uniquestring(resourceGroup().id), 'sqlw')]",
+          "vhdStorageAccountNameMGT": "[concat(uniquestring(resourceGroup().id), 'mgt')]",
+          "vhdStorageAccountNameWEB": "[concat(uniquestring(resourceGroup().id), 'web')]",
+          "diagnosticsStorageAccountNameAD": "[concat(uniquestring(resourceGroup().id), 'addiag')]",
+          "diagnosticsStorageAccountNameSQL": "[concat(uniquestring(resourceGroup().id), 'sqldiag')]",
+          "diagnosticsStorageAccountNameMGT": "[concat(uniquestring(resourceGroup().id), 'mgtdiag')]",
+          "diagnosticsStorageAccountNameWEB": "[concat(uniquestring(resourceGroup().id), 'webdiag')]"
+        },
+        "types": {
+          "activeDirectory": "Standard_LRS",
+          "sql": "Standard_LRS",
+          "sqlw": "Standard_LRS",
+          "mgt": "Standard_LRS",
+          "web": "Standard_LRS",
+          "sqldiag": "Standard_LRS"
+        }
+      },
+      "loadBalancers": {
+        "SQLAOProbe": "SQLAlwaysOnEndPointProbe",
+        "names": {
+          "rdpLBFE": "rdpLBFE",
+          "sqlFE": "sqlLBFE",
+          "adLBBE": "adLBBE",
+          "sqlBE": "sqlLBBE",
+          "rdpLB": "rdpLoadBalancer",
+          "sql": "sqlLoadBalancer"
+        }
+      },
+      "virtualMachines": {
+        "ad": {
+          "offer": "WindowsServer",
+          "publisher": "MicrosoftWindowsServer",
+          "sku": "2016-Datacenter",
+          "size":"Standard_DS2_v2"
+        },
+        "sql0":{
+          "name": "sql0-vm",
+          "offer": "SQL2016-WS2012R2",
+          "publisher": "MicrosoftSQLServer",
+          "sku": "SQL2016-WS2012R2",
+          "size":"Standard_DS2_v2"
+        },
+        "sql1":{
+          "name": "sql1-vm",
+          "offer": "SQL2016-WS2012R2",
+          "publisher": "MicrosoftSQLServer",
+          "sku": "SQL2016-WS2012R2",
+          "size":"Standard_DS2_v2"
+        },
+        "sqlw":{
+          "name": "sqlw-vm",
+          "offer": "SQL2016-WS2012R2",
+          "publisher": "MicrosoftSQLServer",
+          "sku": "SQL2016-WS2012R2",
+          "size":"Standard_DS2_v2"
+        },
+        "mgt":{
+          "offer": "WindowsServer",
+          "publisher": "MicrosoftWindowsServer",
+          "sku": "2016-Datacenter",
+          "size":"Standard_D1_v2"
+        },
+        "web":{
+          "offer": "WindowsServer",
+          "publisher": "MicrosoftWindowsServer",
+          "sku": "2016-Datacenter",
+          "size":"Standard_DS2_v2"
+        }
+      },
+      "sqlAOEPName": "aodns-hadr",
+      "sharePath": "aodns-fsw",
+      "clusterName": "aodns-fc",
+      "numberOfDisks": 2,
+      "workloadType": "GENERAL",
+      "autoPatchingDay": "Sunday",
+      "autoPatchingStartHour": 2
+    },
+    "references": {
+      "availabilitySets": {
+        "ad": "[resourceId('Microsoft.Compute/availabilitySets', variables('configuration').network.availabilitySets.names.ad)]",
+        "sql": "[resourceId('Microsoft.Compute/availabilitySets', variables('configuration').network.availabilitySets.names.sql)]",
+        "mgt": "[resourceId('Microsoft.Compute/availabilitySets', variables('configuration').network.availabilitySets.names.mgt)]",
+        "web": "[resourceId('Microsoft.Compute/availabilitySets', variables('configuration').network.availabilitySets.names.web)]"
+      },
+      "subnets": {
+        "ad": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.ad)]",
+        "mgt": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.mgt)]",
+        "sql": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.sql)]",
+        "web": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.web)]"
+      },
+      "loadBalancers": {
+        "sql": "[resourceId('Microsoft.Network/loadBalancers', variables('configuration').loadBalancers.names.sql)]"
       }
     },
+    "derivedReferences": {
+      "sqlBEAddressPoolID": "[concat(variables('references').loadBalancers.sql,'/backendAddressPools/', variables('configuration').loadBalancers.names.sqlBE)]",
+      "sqllbFEConfigID": "[concat(variables('references').loadBalancers.sql,'/frontendIPConfigurations/', variables('configuration').loadBalancers.names.sqlFE)]",
+      "sqllbProbeID": "[concat(variables('references').loadBalancers.sql,'/probes/',variables('configuration').loadBalancers.SQLAOProbe)]"
+    },
     "templateLinks": {
-      "vnetnew": "[concat(parameters('templateBaseUrl'), 'vnetnew.json')]",
-      "activeDirectory": "[concat(parameters('templateBaseUrl'), 'activedirectory.json')]"
+      "vnetnew": "[concat(parameters('artifactsLocation'), 'vnetnew.json')]",
+      "updateNic": "[concat(parameters('artifactsLocation'),'/nestedtemplates/updateNic.json')]",
+      "preparingAlwaysOnSqlServer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/preparingSqlServer.json')]",
+      "configuringAlwaysOn": "[concat(parameters('artifactsLocation'),'/nestedtemplates/configuringAlwaysOn.json')]",
+      "loadBalancers": "[concat(parameters('artifactsLocation'),'/loadBalancers.json')]",
+      "sqlLoadBalancer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/sqlLoadBalancer.json')]",
+      "activeDirectory": "[concat(parameters('artifactsLocation'), 'activedirectory.json')]"
+    },
+    "modules": {
+      "createCluster": "[concat(parameters('artifactsLocation'),'/CreateFailoverCluster.ps1.zip')]",
+      "sqlAOPrepare": "[concat(parameters('artifactsLocation'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
+      "fileShareWitness": "[concat(parameters('artifactsLocation'),'/CreateFileShareWitness.ps1.zip')]"
+    },
+    "functions": {
+      "sqlAOPrepareConfiguration": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
+      "createClusterConfiguration": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
+      "fileShareWitnessConfiguration": "CreateFileShareWitness.ps1\\CreateFileShareWitness"
     }
   },
   "resources": [
@@ -36,7 +195,7 @@
       "name": "VirtualNetwork",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "comments": "",
+      "comments": "Deploys vnet, 4 subnets, storage accounts, network interfaces, and availabilitySets for ad, sql, and mgt",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -45,28 +204,169 @@
         },
         "parameters": {
           "virtualNetworkName": {
-            "value": "[variables('configuration').vnet.virtualNetworkName]"
+            "value": "[variables('configuration').network.virtualNetworkName]"
           },
           "virtualNetworkAddressRange": {
-            "value": "[variables('configuration').vnet.virtualNetworkAddressRange]"
+            "value": "[variables('configuration').network.virtualNetworkAddressRange]"
           },
           "mgtSubnetName": {
-            "value": "[variables('configuration').vnet.mgtSubnetName]"
+            "value": "[variables('configuration').network.subnets.names.mgt]"
           },
           "sqlSubnetName": {
-            "value": "[variables('configuration').vnet.sqlSubnetName]"
+            "value": "[variables('configuration').network.subnets.names.sql]"
           },
           "adSubnetName": {
-            "value": "[variables('configuration').vnet.adSubnetName]"
+            "value": "[variables('configuration').network.subnets.names.ad]"
+          },
+          "webSubnetName": {
+            "value": "[variables('configuration').network.subnets.names.web]"
           },
           "mgtSubnetPrefix": {
-            "value": "[variables('configuration').vnet.mgtSubnetPrefix]"
+            "value": "[variables('configuration').network.subnets.addressRanges.mgt]"
           },
           "sqlSubnetPrefix": {
-            "value": "[variables('configuration').vnet.sqlSubnetPrefix]"
+            "value": "[variables('configuration').network.subnets.addressRanges.sql]"
           },
           "adSubnetPrefix": {
-            "value": "[variables('configuration').vnet.adSubnetPrefix]"
+            "value": "[variables('configuration').network.subnets.addressRanges.ad]"
+          },
+          "webSubnetPrefix": {
+            "value": "[variables('configuration').network.subnets.addressRanges.web]"
+          },
+          "activeDirectoryStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameAD]"
+          },
+          "activeDirectoryStorageAccountType": {
+            "value": "[variables('configuration').storageAccounts.types.activeDirectory]"
+          },
+          "sqlwStorageAccountType": {
+            "value": "[variables('configuration').storageAccounts.types.sqlw]"
+          },
+          "sqlwStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQLW]"
+          },
+          "sqlStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQL]"
+          },
+          "sqlStorageAccountType": {
+            "value": "[variables('configuration').storageAccounts.types.sql]"
+          },
+          "sqldiagStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.diagnosticsStorageAccountNameSQL]"
+          },
+          "sqldiagStorageAccountType": {
+            "value": "[variables('configuration').storageAccounts.types.sqldiag]"
+          },
+          "mgtStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameMGT]"
+          },
+          "mgtStorageAccountType": {
+            "value": "[variables('configuration').storageAccounts.types.mgt]"
+          },
+          "adAvailabilitySetName": {
+            "value": "[variables('configuration').network.availabilitySets.names.ad]"
+          },
+          "mgtAvailabilitySetName": {
+            "value": "[variables('configuration').network.availabilitySets.names.mgt]"
+          },
+          "sqlAvailabilitySetName": {
+            "value": "[variables('configuration').network.availabilitySets.names.sql]"
+          },
+          "adPDCNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.adpdc]"
+          },
+          "adBDCNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.adbdc]"
+          },
+          "sql0NicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.sql0]"
+          },
+          "sql1NicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.sql1]"
+          },
+          "sqlwNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.sqlw]"
+          },
+          "adSubnetRef": {
+            "value": "[variables('references').subnets.ad]"
+          },
+          "mgtSubnetRef": {
+            "value": "[variables('references').subnets.mgt]"
+          },
+          "sqlSubnetRef": {
+            "value": "[variables('references').subnets.sql]"
+          },
+          "adPDCIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adpdc]"
+          },
+          "adBDCIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adbdc]"
+          },
+          "sql0IPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.sql0]"
+          },
+          "sql1IPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.sql1]"
+          },
+          "sqlwIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.sqlw]"
+          },
+          "mgtIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.mgt]"
+          },
+          "domainName": {
+            "value": "[variables('configuration').network.domainName]"
+          },
+          "dnsPrefix": {
+            "value": "[variables('configuration').network.dnsPrefix]"
+          }
+        }
+      }
+    },
+    {
+      "name": "LoadBalancers",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetwork",
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('templateLinks').loadBalancers]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "sqlLBName": {
+            "value": "[variables('configuration').loadBalancers.names.sql]"
+          },
+          "sqlLBFE": {
+            "value": "[variables('configuration').loadBalancers.names.sqlFE]"
+          },
+          "sqlLBIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddress.sqlLB]"
+          },
+          "sqlSubnetRef": {
+            "value": "[parameters('references').subnets.sql]"
+          },
+          "sqlLBBE": {
+            "value": "[variables('configuration').loadBalancers.names.sqlBE]"
+          },
+          "sqlLBBEID": {
+            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
+          },
+          "sqllbFEConfigID": {
+            "value": "[variables('derivedIds').sqllbFEConfigID]"
+          },
+          "sqllbProbeID": {
+            "value": "[variables('derivedIds').sqllbProbeID]"
+          },
+          "SQLAOProbe": {
+            "value": "[variables('configuration').loadBalancers.SQLAOProbe]"
+          },
+          "sqlLoadBalancerTemplateURL": {
+            "value": "[variables('templateLinks').sqlLoadBalancer]"
           }
         }
       }
@@ -87,16 +387,16 @@
         },
         "parameters": {
           "virtualNetworkName": {
-            "value": "[variables('configuration').vnet.virtualNetworkName]"
+            "value": "[variables('configuration').network.virtualNetworkName]"
           },
           "virtualNetworkAddressRange": {
-            "value": "[variables('configuration').vnet.virtualNetworkAddressRange]"
+            "value": "[variables('configuration').network.virtualNetworkAddressRange]"
           },
           "adSubnetName": {
-            "value": "[variables('configuration').vnet.adSubnetName]"
+            "value": "[variables('configuration').network.adSubnetName]"
           },
           "adSubnetPrefix": {
-            "value": "[variables('configuration').vnet.adSubnetPrefix]"
+            "value": "[variables('configuration').network.adSubnetPrefix]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
@@ -104,6 +404,9 @@
           "adminPassword": {
             "value": "[parameters('adminPassword')]"
           },
+          "vhdStorageAccountName" : {
+            "value": "[variables('storageAccounts').names.vhdStorageAccountName]"
+          }
         }
       }
     }

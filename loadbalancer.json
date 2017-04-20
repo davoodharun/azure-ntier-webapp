@@ -2,93 +2,84 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "sqlLBName": {
+      "type": "string"
+    },
+    "sqlLBFE": {
+      "type": "string"
+    },
+    "sqlLBIPAddress": {
+      "type": "string"
+    },
+    "sqlSubnetRef": {
+      "type": "string"
+    },
+    "sqlLBBE": {
+      "type": "string"
+    },
+    "sqlLBBEID": {
+      "type": "string"
+    },
+    "sqllbFEConfigID": {
+      "type": "string"
+    },
+    "sqllbProbeID": {
+      "type": "string"
+    },
+    "SQLAOProbe": {
+      "type": "string"
+    },
+    "sqlLoadBalancerTemplateURL": {
+      "type": "string"
+    }
   },
   "variables": {
   },
   "resources": [
     {
-      "apiVersion": "2015-05-01-preview",
-      "name": "[parameters('lbName')]",
-      "type": "Microsoft.Network/loadBalancers",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
-      ],
+      "name": "SQLLoadBalancer",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "Create Load Balancers for SQL and DC",
       "properties": {
-        "frontendIPConfigurations": [
-          {
-            "name": "LoadBalancerFrontEnd",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[variables('publicIPAddressID')]"
-              }
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "BackendPool1"
-          }
-        ],
-        "inboundNatRules": [
-          {
-            "name": "RDP-VM0",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 50001,
-              "backendPort": 3389,
-              "enableFloatingIP": false
-            }
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('sqlLoadBalancerTemplateURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[resourceGroup().location]"
           },
-          {
-            "name": "RDP-VM1",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 50002,
-              "backendPort": 3389,
-              "enableFloatingIP": false
-            }
+          "sqlLBName": {
+            "value": "[parameters('sqlLBName')]"
+          },
+          "sqlLBFE": {
+            "value": "[parameters('sqlLBFE')]"
+          },
+          "sqlLBIPAddress": {
+            "value": "[parameters('sqlLBIPAddress')]"
+          },
+          "staticSubnetRef": {
+            "value": "[parameters('sqlSubnetRef')]"
+          },
+          "sqlLBBE": {
+            "value": "[parameters('sqlLBBE')]"
+          },
+          "sqlLBBEID": {
+            "value": "[parameters('sqlBEAddressPoolID')]"
+          },
+          "sqllbFEConfigID": {
+            "value": "[parameters('sqllbFEConfigID')]"
+          },
+          "sqllbProbeID": {
+            "value": "[parameters('sqllbProbeID')]"
+          },
+          "SQLAOProbe": {
+            "value": "[parameters('SQLAOProbe')]"
           }
-        ],
-        "loadBalancingRules": [
-          {
-            "name": "LBRule",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "backendAddressPool": {
-                "id": "[variables('lbPoolID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 80,
-              "backendPort": 80,
-              "enableFloatingIP": false,
-              "idleTimeoutInMinutes": 5,
-              "probe": {
-                "id": "[variables('lbProbeID')]"
-              }
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "tcpProbe",
-            "properties": {
-              "protocol": "tcp",
-              "port": 80,
-              "intervalInSeconds": 5,
-              "numberOfProbes": 2
-            }
-          }
-        ]
+        }
       }
-    }
+    },
   ]
 }

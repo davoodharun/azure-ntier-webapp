@@ -17,8 +17,21 @@
     "adminUsername": {
       "type": "string"
     },
+    "vhdStorageAccountName": {
+      "type": "string"
+    },
     "adminPassword": {
       "type": "securestring"
+    },
+    "storageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "Standard_LRS"
     },
     "_artifactsLocation": {
       "type": "string",
@@ -33,12 +46,15 @@
         "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
       },
       "defaultValue": ""
+    },
+    "dnsPrefix": {
+      "type": "string"
+    },
+    "domainName": {
+      "type": "string"
     }
-
   },
   "variables": {
-    "vhdStorageAccountName": "[concat(uniquestring(resourceGroup().id), 'ad')]",
-    "storageAccountType": "Standard_LRS",
     "dnsPrefix": "bprintaz",
     "domainName": "mydomain.local",
     "adAvailabilitySetName": "adAvailabiltySet",
@@ -70,17 +86,6 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('vhdStorageAccountName')]",
-      "apiVersion": "2016-01-01",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "[variables('storageAccountType')]"
-      },
-      "kind": "Storage",
-      "properties": {}
-    },
-    {
       "name": "[variables('publicIPAddressName')]",
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2016-10-01",
@@ -88,62 +93,8 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('dnsPrefix')]"
+          "domainNameLabel": "[parameters('dnsPrefix')]"
         }
-      }
-    },
-    {
-      "name": "[variables('adAvailabilitySetName')]",
-      "type": "Microsoft.Compute/availabilitySets",
-      "apiVersion": "2016-03-30",
-      "location": "[resourceGroup().location]"
-    },
-    {
-      "name": "[variables('adPDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2016-10-01",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))]",
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
-      ],
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[variables('adPDCNicIPAddress')]",
-              "subnet": {
-                "id": "[variables('adSubnetRef')]"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "[variables('adBDCNicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2016-10-01",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))]",
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
-      ],
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[variables('adBDCNicIPAddress')]",
-              "subnet": {
-                "id": "[variables('adSubnetRef')]"
-              }
-            }
-          }
-        ]
       }
     },
     {
@@ -152,7 +103,7 @@
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',variables('vhdStorageAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts',parameters('vhdStorageAccountName'))]",
         "[resourceId('Microsoft.Network/networkInterfaces',variables('adPDCNicName'))]",
         "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
       ],
@@ -178,7 +129,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/','osdisk.vhd')]"
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/','osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -186,7 +137,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/', variables('adPDCDataDisk'),'-1.vhd')]"
+                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/', variables('adPDCDataDisk'),'-1.vhd')]"
               },
               "name": "[concat(variables('adPDCVMName'),'-data-disk1')]",
               "caching": "None",
@@ -222,7 +173,7 @@
               "ModulesUrl": "[variables('adPDCModulesURL')]",
               "ConfigurationFunction": "[variables('adPDCConfigurationFunction')]",
               "Properties": {
-                "DomainName": "[variables('domainName')]",
+                "DomainName": "[parameters('domainName')]",
                 "AdminCreds": {
                   "UserName": "[parameters('adminUserName')]",
                   "Password": "PrivateSettingsRef:AdminPassword"
@@ -318,7 +269,7 @@
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',variables('vhdStorageAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts',parameters('vhdStorageAccountName'))]",
         "[resourceId('Microsoft.Network/networkInterfaces',variables('adBDCNicName'))]",
         "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]",
       ],
@@ -344,7 +295,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/','osdisk.vhd')]"
+              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/','osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -352,7 +303,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/',variables('adBDCDataDisk'),'-1.vhd')]"
+                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/',variables('adBDCDataDisk'),'-1.vhd')]"
               },
               "name": "[concat(variables('adBDCVMName'),'-data-disk1')]",
               "caching": "None",
@@ -421,7 +372,7 @@
             "value": "[parameters('adminPassword')]"
           },
           "domainName": {
-            "value": "[variables('domainName')]"
+            "value": "[parameters('domainName')]"
           },
           "adBDCConfigurationFunction": {
             "value": "[variables('adBDCConfigurationFunction')]"
