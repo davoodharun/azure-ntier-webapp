@@ -9,6 +9,12 @@
       "type": "string",
       "defaultValue": "10.200.0.0/16"
     },
+    "domainName":{
+      "type": "string"
+    },
+    "dnsPrefix": {
+      "type": "string"
+    },
     "mgtSubnetName": {
       "type": "string",
       "defaultValue": "mgt"
