@@ -287,6 +287,9 @@
           "sqlwNicName": {
             "value": "[variables('configuration').network.networkInterfaces.names.sqlw]"
           },
+          "mgtNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.mgt]"
+          },
           "adSubnetRef": {
             "value": "[variables('references').subnets.ad]"
           },
