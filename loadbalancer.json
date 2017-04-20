@@ -67,7 +67,7 @@
             "value": "[parameters('sqlLBBE')]"
           },
           "sqlLBBEID": {
-            "value": "[parameters('sqlBEAddressPoolID')]"
+            "value": "[parameters('sqlLBBEID')]"
           },
           "sqllbFEConfigID": {
             "value": "[parameters('sqllbFEConfigID')]"

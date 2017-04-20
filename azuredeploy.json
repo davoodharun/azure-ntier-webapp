@@ -35,9 +35,6 @@
             "sql": "sql",
             "web": "web"
           },
-          "ids": {
-
-          },
           "addressRanges": {
             "web": "10.0.3.0/24",
             "mgt": "10.0.2.0/24",
@@ -175,7 +172,7 @@
       "updateNic": "[concat(parameters('artifactsLocation'),'/nestedtemplates/updateNic.json')]",
       "preparingAlwaysOnSqlServer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/preparingSqlServer.json')]",
       "configuringAlwaysOn": "[concat(parameters('artifactsLocation'),'/nestedtemplates/configuringAlwaysOn.json')]",
-      "loadBalancers": "[concat(parameters('artifactsLocation'),'/loadBalancers.json')]",
+      "loadBalancers": "[concat(parameters('artifactsLocation'),'loadbalancer.json')]",
       "sqlLoadBalancer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/sqlLoadBalancer.json')]",
       "activeDirectory": "[concat(parameters('artifactsLocation'), 'activedirectory.json')]"
     },
@@ -348,73 +345,28 @@
             "value": "[variables('configuration').loadBalancers.names.sqlFE]"
           },
           "sqlLBIPAddress": {
-            "value": "[variables('configuration').network.privateIPAddress.sqlLB]"
+            "value": "[variables('configuration').network.privateIPAddresses.sqlLB]"
           },
           "sqlSubnetRef": {
-            "value": "[parameters('references').subnets.sql]"
+            "value": "[variables('references').subnets.sql]"
           },
           "sqlLBBE": {
             "value": "[variables('configuration').loadBalancers.names.sqlBE]"
           },
           "sqlLBBEID": {
-            "value": "[variables('derivedIds').sqlBEAddressPoolID]"
+            "value": "[variables('derivedReferences').sqlBEAddressPoolID]"
           },
           "sqllbFEConfigID": {
-            "value": "[variables('derivedIds').sqllbFEConfigID]"
+            "value": "[variables('derivedReferences').sqllbFEConfigID]"
           },
           "sqllbProbeID": {
-            "value": "[variables('derivedIds').sqllbProbeID]"
+            "value": "[variables('derivedReferences').sqllbProbeID]"
           },
           "SQLAOProbe": {
             "value": "[variables('configuration').loadBalancers.SQLAOProbe]"
           },
           "sqlLoadBalancerTemplateURL": {
             "value": "[variables('templateLinks').sqlLoadBalancer]"
-          }
-        }
-      }
-    },
-    {
-      "name": "ActiveDirectory",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "comments": "",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork",
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('templateLinks').activeDirectory]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "virtualNetworkName": {
-            "value": "[variables('configuration').network.virtualNetworkName]"
-          },
-          "virtualNetworkAddressRange": {
-            "value": "[variables('configuration').network.virtualNetworkAddressRange]"
-          },
-          "adSubnetName": {
-            "value": "[variables('configuration').network.subnets.names.ad]"
-          },
-          "adSubnetPrefix": {
-            "value": "[variables('configuration').network.subnets.addressRanges.ad]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "vhdStorageAccountName" : {
-            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameAD]"
-          },
-          "dnsPrefix": {
-            "value": "[variables('configuration').network.dnsPrefix]"
-          },
-          "domainName": {
-            "value": "[variables('configuration').network.domainName]"
           }
         }
       }
