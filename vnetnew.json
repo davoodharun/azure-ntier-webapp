@@ -295,7 +295,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adPDCNicIPAddress')]",
+              "privateIPAddress": "[parameters('adPDCIPAddress')]",
               "subnet": {
                 "id": "[parameters('adSubnetRef')]"
               }
@@ -315,7 +315,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('adBDCNicIPAddress')]",
+              "privateIPAddress": "[parameters('adBDCIPAddress')]",
               "subnet": {
                 "id": "[parameters('adSubnetRef')]"
               }
@@ -335,7 +335,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('mgtNicIPAddress')]",
+              "privateIPAddress": "[parameters('mgtIPAddress')]",
               "subnet": {
                 "id": "[parameters('mgtSubnetRef')]"
               }
@@ -355,7 +355,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('sql0NicIPAddress')]",
+              "privateIPAddress": "[parameters('sql0IPAddress')]",
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               }
@@ -375,7 +375,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('sql1NicIPAddress')]",
+              "privateIPAddress": "[parameters('sql1IPAddress')]",
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               }
@@ -395,7 +395,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('sqlwNicIPAddress')]",
+              "privateIPAddress": "[parameters('sqlwIPAddress')]",
               "subnet": {
                 "id": "[parameters('sqlSubnetRef')]"
               }
