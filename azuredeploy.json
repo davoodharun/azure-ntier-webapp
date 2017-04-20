@@ -60,10 +60,10 @@
           "mgt": "10.0.2.4",
           "adpdc": "10.0.0.4",
           "adbdc": "10.0.0.5",
-          "sql1": "10.0.1.0.4",
-          "sql0": "10.0.1.0.5",
-          "sqlw": "10.0.1.0.6",
-          "sqlLB": "10.0.1.0.7",
+          "sql1": "10.0.1.4",
+          "sql0": "10.0.1.5",
+          "sqlw": "10.0.1.6",
+          "sqlLB": "10.0.1.7",
           "web": "web"
         }
       },
@@ -396,10 +396,10 @@
             "value": "[variables('configuration').network.virtualNetworkAddressRange]"
           },
           "adSubnetName": {
-            "value": "[variables('configuration').network.adSubnetName]"
+            "value": "[variables('configuration').network.subnets.names.ad]"
           },
           "adSubnetPrefix": {
-            "value": "[variables('configuration').network.adSubnetPrefix]"
+            "value": "[variables('configuration').network.subnets.addressRanges.ad]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
@@ -408,7 +408,13 @@
             "value": "[parameters('adminPassword')]"
           },
           "vhdStorageAccountName" : {
-            "value": "[variables('storageAccounts').names.vhdStorageAccountName]"
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameAD]"
+          },
+          "dnsPrefix": {
+            "value": "[variables('configuration').network.dnsPrefix]"
+          },
+          "domainName": {
+            "value": "[variables('configuration').network.domainName]"
           }
         }
       }

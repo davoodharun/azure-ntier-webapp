@@ -103,9 +103,7 @@
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',parameters('vhdStorageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces',variables('adPDCNicName'))]",
-        "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
+
       ],
       "properties": {
         "hardwareProfile": {
@@ -228,7 +226,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/',variables('adBDCNicName'))]",
         "Microsoft.Resources/deployments/UpdateVNetDNS1"
       ],
       "properties": {
@@ -269,9 +266,7 @@
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',parameters('vhdStorageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces',variables('adBDCNicName'))]",
-        "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]",
+      
       ],
       "properties": {
         "hardwareProfile": {
