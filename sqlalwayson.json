@@ -519,9 +519,6 @@
           "sqlVMName": {
             "value": "[parameters('sql0VMName')]"
           },
-          "location": {
-            "value": "[resourceGroup().location]"
-          },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
           },
