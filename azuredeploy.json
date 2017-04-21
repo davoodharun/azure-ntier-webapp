@@ -705,6 +705,12 @@
           },
           "nicTemplateURL": {
             "value": "[variables('templateLinks').updateNic]"
+          },
+          "sqlLBName": {
+            "value": "[variables('configuration').loadBalancers.names.sql]"
+          },
+          "adPDCVMName": {
+            "value": "[variables('configuration').virtualMachines.names.adpdc]"
           }
         }
       }

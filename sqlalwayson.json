@@ -157,6 +157,12 @@
     },
     "nicTemplateURL": {
       "type": "string"
+    },
+    "sqlLBName": {
+      "type": "string"
+    },
+    "adPDCVMName": {
+      "type": "string"
     }
   },
   "variables": {
@@ -511,7 +517,7 @@
         },
         "parameters": {
           "sqlVMName": {
-            "value": "[variables('vmSettings').sqlVMName]"
+            "value": "[parameters('sql0VMName')]"
           },
           "location": {
             "value": "[resourceGroup().location]"
@@ -562,7 +568,7 @@
             "value": "[parameters('autoPatchingStartHour')]"
           },
           "autoPatchingEnable": {
-            "value": "[variables(parameters('autoPatchingDay'))]"
+            "value": "[parameters('autoPatchingDay')]"
           },
           "numberOfDisks": {
             "value": "[parameters('numberOfSqlVMDisks')]"
@@ -603,7 +609,7 @@
             "value": "[parameters('domainName')]"
           },
           "sqlAOEPName": {
-            "value": "[variables('sqlAOEPName')]"
+            "value": "[parameters('sqlAOEPName')]"
           },
           "sqlServerServiceAccountUserName": {
             "value": "[parameters('adminUsername')]"
@@ -618,10 +624,10 @@
             "value": "[parameters('createClusterConfigurationFunction')]"
           },
           "clusterName": {
-            "value": "[variables('clusterName')]"
+            "value": "[parameters('clusterName')]"
           },
           "sharePath": {
-            "value": "[variables('sharePath')]"
+            "value": "[parameters('sharePath')]"
           },
           "sqlAOAGName": {
             "value": "[parameters('sqlAOAGName')]"
@@ -633,16 +639,16 @@
             "value": "[parameters('sqlAOListenerPort')]"
           },
           "sqlLBName": {
-            "value": "[variables('lbSettings').sqlLBName]"
+            "value": "[parameters('sqlLBName')]"
           },
           "sqlLBIPAddress": {
             "value": "[parameters('sqlLBIPAddress')]"
           },
           "adPDCVMName": {
-            "value": "[variables('vmSettings').adPDCVMName]"
+            "value": "[parameters('adPDCVMName')]"
           },
           "sqlwVMName": {
-            "value": "[variables('vmSettings').sqlwVMName]"
+            "value": "[parameters('sqlwVMName')]"
           },
           "numberOfDisks": {
             "value": "[parameters('numberOfSqlVMDisks')]"
