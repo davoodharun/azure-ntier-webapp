@@ -370,6 +370,207 @@
           }
         }
       }
+    },
+    {
+      "name": "ActiveDirectory",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetwork",
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('templateLinks').activeDirectory]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": {
+            "value": "[variables('configuration').network.virtualNetworkName]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[variables('configuration').network.virtualNetworkAddressRange]"
+          },
+          "adSubnetName": {
+            "value": "[variables('configuration').network.subnets.names.ad]"
+          },
+          "adSubnetPrefix": {
+            "value": "[variables('configuration').network.subnets.addressRanges.ad]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "vhdStorageAccountName" : {
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameAD]"
+          },
+          "dnsPrefix": {
+            "value": "[variables('configuration').network.dnsPrefix]"
+          },
+          "domainName": {
+            "value": "[variables('configuration').network.domainName]"
+          }
+        }
+      }
+    },
+    {
+      "name": "SQLAlwaysOn",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "comments": "",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/VirtualNetwork",
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('templateLinks').activeDirectory]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "sql0VMName": {
+            "value": "[variables('virtualMachines').sql0.name]"
+          },
+          "sql0VMSize": {
+            "type": "[variables('virtualMachines').sql0.size]"
+          },
+          "sql0ImagePublisher": {
+            "type": "[variables('virtualMachines').sql0.publisher]"
+          },
+          "sql0ImageOffer": {
+            "type": "[variables('virtualMachines').sql0.offer]"
+          },
+          "sql0ImageSKU": {
+            "type": "[variables('virtualMachines').sql0.sku]"
+          },
+          "sql1VMName": {
+            "value": "[variables('virtualMachines').sql1.name]"
+          },
+          "sql1VMSize": {
+            "type": "[variables('virtualMachines').sql1.size]"
+          },
+          "sql1ImagePublisher": {
+            "type": "[variables('virtualMachines').sql1.publisher]"
+          },
+          "sql1ImageOffer": {
+            "type": "[variables('virtualMachines').sql1.offer]"
+          },
+          "sql1ImageSKU": {
+            "type": "[variables('virtualMachines').sql1.sku]"
+          },
+          "sqlwImagePublisher": {
+            "type": "[variables('virtualMachines').sqlw.publisher]"
+          },
+          "sqlwImageOffer": {
+            "type": "[variables('virtualMachines').sqlw.offer]"
+          },
+          "sqlwImageSKU": {
+            "type": "[variables('virtualMachines').sqlw.sku]"
+          },
+          "sqlwVMName": {
+            "value": "[variables('virtualMachines').sqlw.name]"
+          },
+          "sqlwVMSize": {
+            "type": "[variables('virtualMachines').sqlw.size]"
+          },
+          "sql0StorageAccountName": {
+            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+          },
+          "sql0StorageAccountType": {
+            "type": "[variables('storageAccounts').types.sql]"
+          },
+          "sql1StorageAccountName": {
+            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+          },
+          "sql1StorageAccountType": {
+            "value": "[variables('storageAccounts').types.sql]"
+          },
+          "sqlwStorageAccountName": {
+            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+          },
+          "sqlwStorageAccountType": {
+            "value": "[variables('storageAccounts').types.sql]"
+          },
+          "sqlAvailabilitySetName": {
+            "type": "string"
+          },
+          "sqlwNicName": {
+            "type": "string"
+          },
+          "sqlNicName": {
+            "type": "string"
+          },
+          "nicTemplateURL": {
+            "value": "[variables('templateLinks').updateNic]"
+          },
+          "configuringAlwaysOnURL": {
+            "value": "[variables('templateLinks').configuringAlwaysOn]"
+          },
+          "preparingAlwaysOnSqlServerURL": {
+            "value": "[variables('templateLinks').preparingAlwaysOnSqlServer]"
+          },
+          "sqlAOPrepareModulesURL": {
+            "type": "[variables('modules').sqlAOPrepare]"
+          },
+          "sqlAOPrepareConfigurationFunction": {
+            "type": "[variables('functions').sqlAOPrepareConfiguration]"
+          },
+          "createClusterModulesURL": {
+            "type": "[variables('modules').createCluster]"
+          },
+          "createClusterConfigurationFunction": {
+            "type": "[variables('functions').createClusterConfiguration]"
+          },
+          "fswModulesURL": {
+            "type": "[variables('modules').fileShareWitness]"
+          },
+          "fswConfigurationFunction": {
+            "type": "[variables('functions').fileShareWitnessConfiguration]"
+          },
+          "sqlSubnetRef": {
+            "value": "[variables('configuration').network.subnets.ids.sql]"
+          },
+          "adPDCNicIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adpdc]"
+          },
+          "adBCNicIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adbdc]"
+          },
+          "domainName": {
+            "value": "[variables('configuration').network.domainName]"
+          },
+          "sqlAOEPName": {
+            "value": "[variables('configuration').sqlAOEPName]"
+          },
+          "sharePath": {
+            "value": "[variables('configuration').sharePath]"
+          },
+          "clusterName": {
+            "value": "[variables('configuration').clusterName]"
+          },
+          "numberOfDisks": {
+            "value": "[variables('configuration').numberOfDisks]"
+          },
+          "workloadType": {
+            "value": "[variables('configuration').workloadType]"
+          },
+          "autoPatchingDay": {
+            "value": "[variables('configuration').autoPatchingDay]"
+          },
+          "autoPatchingStartHour": {
+            "value": "[variables('configuration').autoPatchingStartHour]"
+          }
+        }
+      }
     }
   ]
 }

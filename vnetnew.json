@@ -287,6 +287,9 @@
     {
       "name": "[parameters('adPDCNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -307,6 +310,9 @@
     {
       "name": "[parameters('adBDCNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -327,6 +333,9 @@
     {
       "name": "[parameters('mgtNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -347,6 +356,9 @@
     {
       "name": "[parameters('sql0NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -367,6 +379,9 @@
     {
       "name": "[parameters('sql1NicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
@@ -387,6 +402,9 @@
     {
       "name": "[parameters('sqlwNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      ],
       "apiVersion": "2016-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
