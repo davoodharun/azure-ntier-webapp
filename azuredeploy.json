@@ -438,7 +438,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork"
+        "Microsoft.Resources/deployments/LoadBalancers"
       ],
       "properties": {
         "mode": "Incremental",
@@ -454,49 +454,49 @@
             "value": "[parameters('adminPassword')]"
           },
           "sql0VMName": {
-            "value": "[variables('virtualMachines').sql0.name]"
+            "value": "[variables('configuration').virtualMachines.sql0.name]"
           },
           "sql0VMSize": {
-            "type": "[variables('virtualMachines').sql0.size]"
+            "type": "[variables('configuration').virtualMachines.sql0.size]"
           },
           "sql0ImagePublisher": {
-            "type": "[variables('virtualMachines').sql0.publisher]"
+            "type": "[variables('configuration').virtualMachines.sql0.publisher]"
           },
           "sql0ImageOffer": {
-            "type": "[variables('virtualMachines').sql0.offer]"
+            "type": "[variables('configuration').virtualMachines.sql0.offer]"
           },
           "sql0ImageSKU": {
-            "type": "[variables('virtualMachines').sql0.sku]"
+            "type": "[variables('configuration').virtualMachines.sql0.sku]"
           },
           "sql1VMName": {
-            "value": "[variables('virtualMachines').sql1.name]"
+            "value": "[variables('configuration').virtualMachines.sql1.name]"
           },
           "sql1VMSize": {
-            "type": "[variables('virtualMachines').sql1.size]"
+            "type": "[variables('configuration').virtualMachines.sql1.size]"
           },
           "sql1ImagePublisher": {
-            "type": "[variables('virtualMachines').sql1.publisher]"
+            "type": "[variables('configuration').virtualMachines.sql1.publisher]"
           },
           "sql1ImageOffer": {
-            "type": "[variables('virtualMachines').sql1.offer]"
+            "type": "[variables('configuration').virtualMachines.sql1.offer]"
           },
           "sql1ImageSKU": {
-            "type": "[variables('virtualMachines').sql1.sku]"
+            "type": "[variables('configuration').virtualMachines.sql1.sku]"
           },
           "sqlwImagePublisher": {
-            "type": "[variables('virtualMachines').sqlw.publisher]"
+            "type": "[variables('configuration').virtualMachines.sqlw.publisher]"
           },
           "sqlwImageOffer": {
-            "type": "[variables('virtualMachines').sqlw.offer]"
+            "type": "[variables('configuration').virtualMachines.sqlw.offer]"
           },
           "sqlwImageSKU": {
-            "type": "[variables('virtualMachines').sqlw.sku]"
+            "type": "[variables('configuration').virtualMachines.sqlw.sku]"
           },
           "sqlwVMName": {
-            "value": "[variables('virtualMachines').sqlw.name]"
+            "value": "[variables('configuration').virtualMachines.sqlw.name]"
           },
           "sqlwVMSize": {
-            "type": "[variables('virtualMachines').sqlw.size]"
+            "type": "[variables('configuration').virtualMachines.sqlw.size]"
           },
           "sql0StorageAccountName": {
             "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"

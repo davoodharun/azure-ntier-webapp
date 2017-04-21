@@ -138,7 +138,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adPDCVMName'),'data-1.vhd')]"
+                "uri": "[concat('http://', parameters('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adPDCVMName'),'data-1.vhd')]"
               },
               "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
               "caching": "None",
@@ -298,7 +298,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adBDCVMName'),'data-1.vhd')]"
+                "uri": "[concat('http://', parameters('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adBDCVMName'),'data-1.vhd')]"
               },
               "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
               "caching": "None",
