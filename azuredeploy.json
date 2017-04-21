@@ -221,9 +221,9 @@
       "nicTemplate": "[concat(parameters('artifactsLocation'),'/nestedtemplates/nic.json')]"
     },
     "modules": {
-      "createCluster": "[concat(parameters('artifactsLocation'),'/CreateFailoverCluster.ps1.zip')]",
-      "sqlAOPrepare": "[concat(parameters('artifactsLocation'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
-      "fileShareWitness": "[concat(parameters('artifactsLocation'),'/CreateFileShareWitness.ps1.zip')]",
+      "createCluster": "[concat(parameters('artifactsLocation'),'/DSC/CreateFailoverCluster.ps1.zip')]",
+      "sqlAOPrepare": "[concat(parameters('artifactsLocation'),'/DSC/PrepareAlwaysOnSqlServer.ps1.zip')]",
+      "fileShareWitness": "[concat(parameters('artifactsLocation'),'/DSC/CreateFileShareWitness.ps1.zip')]",
       "adPDC": "[concat(parameters('artifactsLocation'),'/DSC/CreateADPDC.ps1.zip')]",
       "adBDCConfigure": "[concat(parameters('artifactsLocation'),'/DSC/ConfigureADBDC.ps1.zip')]",
       "adBDCPreparation": "[concat(parameters('artifactsLocation'),'/DSC/PrepareADBDC.ps1.zip')]",
