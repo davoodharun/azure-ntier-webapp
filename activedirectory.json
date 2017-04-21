@@ -58,6 +58,69 @@
     },
     "adPDCVMName": {
       "type": "string"
+    },
+    "adPDCNicName": {
+      "type": "string"
+    },
+    "adBDCNicName": {
+      "type": "string"
+    },
+    "imagePublisher": {
+      "type": "string"
+    },
+    "imageOffer": {
+      "type": "string"
+    },
+    "imageSKU": {
+      "type": "string"
+    },
+    "adVmSize": {
+      "type": "string"
+    },
+    "adPDCIPAddress": {
+      "type": "string"
+    },
+    "adBDCIPAddress": {
+      "type": "string"
+    },
+    "adAvailabilitySetName": {
+      "type": "string"
+    },
+    "adDataDiskSize": {
+      "type": "int"
+    },
+    "adPDCModulesURL": {
+      "type": "string"
+    },
+    "adPDCConfigurationFunction": {
+      "type": "string"
+    },
+    "vnetwithDNSTemplateUri": {
+      "type": "string"
+    },
+    "adBDCConfigurationModulesURL": {
+      "type": "string"
+    },
+    "adBDCConfigurationFunction": {
+      "type": "string"
+    },
+    "vnetwithDNSTemplateUri": {
+      "type": "string"
+    },
+    "configureADBDCTemplateUri": {
+      "type": "string"
+    },
+    "nicTemplateUri": {
+      "type": "string"
+    },
+    "adSubnetRef": {
+      "type": "string"
+    },
+    "adBDCPreparationModulesURL": {
+      "type": "string"
+    },
+    "adBDCPreparationFunction": {
+      "type": "string"
     }
   },
   "variables": {
@@ -110,10 +173,10 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[variables('adVMSize')]"
+          "vmSize": "[parameters('adVMSize')]"
         },
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('adAvailabilitySetName'))]"
         },
         "osProfile": {
           "computerName": "[parameters('adPDCVMName')]",
@@ -122,9 +185,9 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
-            "sku": "[variables('imageSKU')]",
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
             "version": "latest"
           },
           "osDisk": {
@@ -142,7 +205,7 @@
               },
               "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
               "caching": "None",
-              "diskSizeGB": "[variables('adDataDiskSize')]",
+              "diskSizeGB": "[parameters('adDataDiskSize')]",
               "lun": 0,
               "createOption": "empty"
             }
@@ -151,7 +214,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('adPDCNicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('adPDCNicName'))]"
             }
           ]
         }
@@ -171,8 +234,8 @@
             "typeHandlerVersion": "2.19",
             "autoUpgradeMinorVersion": true,
             "settings": {
-              "ModulesUrl": "[variables('adPDCModulesURL')]",
-              "ConfigurationFunction": "[variables('adPDCConfigurationFunction')]",
+              "ModulesUrl": "[parameters('adPDCModulesURL')]",
+              "ConfigurationFunction": "[parameters('adPDCConfigurationFunction')]",
               "Properties": {
                 "DomainName": "[parameters('domainName')]",
                 "AdminCreds": {
@@ -200,7 +263,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('vnetwithDNSTemplateUri')]",
+          "uri": "[parameters('vnetwithDNSTemplateUri')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -218,7 +281,7 @@
           },
           "DNSServerAddress": {
             "value": [
-              "[variables('adPDCNicIPAddress')]"
+              "[parameters('adPDCIPAddress')]"
             ]
           }
         }
@@ -234,12 +297,12 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('nicTemplateUri')]",
+          "uri": "[parameters('nicTemplateUri')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "nicName": {
-            "value": "[variables('adBDCNicName')]"
+            "value": "[parameters('adBDCNicName')]"
           },
           "ipConfigurations": {
             "value": [
@@ -247,9 +310,9 @@
                 "name": "ipconfig1",
                 "properties": {
                   "privateIPAllocationMethod": "Static",
-                  "privateIPAddress": "[variables('adBDCNicIPAddress')]",
+                  "privateIPAddress": "[parameters('adBDCIPAddress')]",
                   "subnet": {
-                    "id": "[variables('adSubnetRef')]"
+                    "id": "[parameters('adSubnetRef')]"
                   }
                 }
               }
@@ -257,7 +320,7 @@
           },
           "dnsServers": {
             "value": [
-              "[variables('adPDCNicIPAddress')]"
+              "[parameters('adPDCIPAddress')]"
             ]
           }
         }
@@ -270,10 +333,10 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[variables('adVMSize')]"
+          "vmSize": "[parameters('adVMSize')]"
         },
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('adAvailabilitySetName'))]"
         },
         "osProfile": {
           "computerName": "[parameters('adBDCVMName')]",
@@ -282,9 +345,9 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
-            "sku": "[variables('imageSKU')]",
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
             "version": "latest"
           },
           "osDisk": {
@@ -302,7 +365,7 @@
               },
               "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
               "caching": "None",
-              "diskSizeGB": "[variables('adDataDiskSize')]",
+              "diskSizeGB": "[parameters('adDataDiskSize')]",
               "lun": 0,
               "createOption": "empty"
             }
@@ -311,7 +374,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('adBDCNicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('adBDCNicName'))]"
             }
           ]
         }
@@ -331,10 +394,10 @@
         "typeHandlerVersion": "2.19",
         "autoUpgradeMinorVersion": true,
         "settings": {
-          "ModulesUrl": "[variables('adBDCPreparationModulesURL')]",
-          "ConfigurationFunction": "[variables('adBDCPreparationFunction')]",
+          "ModulesUrl": "[parameters('adBDCPreparationModulesURL')]",
+          "ConfigurationFunction": "[parameters('adBDCPreparationFunction')]",
           "Properties": {
-            "DNSServer": "[variables('adPDCNicIPAddress')]"
+            "DNSServer": "[parameters('adPDCIPAddress')]"
           }
         }
       }
@@ -350,7 +413,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('configureADBDCTemplateUri')]",
+          "uri": "[parameters('configureADBDCTemplateUri')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -370,10 +433,10 @@
             "value": "[parameters('domainName')]"
           },
           "adBDCConfigurationFunction": {
-            "value": "[variables('adBDCConfigurationFunction')]"
+            "value": "[parameters('adBDCConfigurationFunction')]"
           },
           "adBDCConfigurationModulesURL": {
-            "value": "[variables('adBDCConfigurationModulesURL')]"
+            "value": "[parameters('adBDCConfigurationModulesURL')]"
           }
         }
       }
@@ -388,7 +451,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('vnetwithDNSTemplateUri')]",
+          "uri": "[parameters('vnetwithDNSTemplateUri')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -406,8 +469,8 @@
           },
           "DNSServerAddress": {
             "value": [
-              "[variables('adPDCNicIPAddress')]",
-              "[variables('adBDCNicIPAddress')]"
+              "[parameters('adPDCIPAddress')]",
+              "[parameters('adBDCIPAddress')]"
             ]
           }
         }

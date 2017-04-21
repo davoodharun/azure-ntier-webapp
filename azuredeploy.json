@@ -111,7 +111,8 @@
           "offer": "WindowsServer",
           "publisher": "MicrosoftWindowsServer",
           "sku": "2016-Datacenter",
-          "size":"Standard_DS2_v2"
+          "size":"Standard_DS2_v2",
+          "diskSize": 1000,
         },
         "sql0":{
           "name": "sql0-vm",
@@ -184,17 +185,27 @@
       "configuringAlwaysOn": "[concat(parameters('artifactsLocation'),'/nestedtemplates/configuringAlwaysOn.json')]",
       "loadBalancers": "[concat(parameters('artifactsLocation'),'loadbalancer.json')]",
       "sqlLoadBalancer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/sqlLoadBalancer.json')]",
-      "activeDirectory": "[concat(parameters('artifactsLocation'), 'activedirectory.json')]"
+      "activeDirectory": "[concat(parameters('artifactsLocation'), 'activedirectory.json')]",
+      "vnetTemplate": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/vnet.json')]",
+      "configureADBDC": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/configureADBDC.json')]",
+      "nicTemplate": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/nic.json')]"
     },
     "modules": {
       "createCluster": "[concat(parameters('artifactsLocation'),'/CreateFailoverCluster.ps1.zip')]",
       "sqlAOPrepare": "[concat(parameters('artifactsLocation'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
-      "fileShareWitness": "[concat(parameters('artifactsLocation'),'/CreateFileShareWitness.ps1.zip')]"
+      "fileShareWitness": "[concat(parameters('artifactsLocation'),'/CreateFileShareWitness.ps1.zip')]",
+      "adPDC": "[concat(parameters('artifactsLocation'),'/DSC/CreateADPDC.ps1.zip')]",
+      "adBDCConfigure": "[concat(parameters('_artifactsLocation'),'/DSC/ConfigureADBDC.ps1.zip')]",
+      "adBDCPreparation": "[concat(parameters('_artifactsLocation'),'/DSC/PrepareADBDC.ps1.zip', parameters('_artifactsLocationSasToken'))]",
+
     },
     "functions": {
       "sqlAOPrepareConfiguration": "PrepareAlwaysOnSqlServer.ps1\\PrepareAlwaysOnSqlServer",
       "createClusterConfiguration": "CreateFailoverCluster.ps1\\CreateFailoverCluster",
-      "fileShareWitnessConfiguration": "CreateFileShareWitness.ps1\\CreateFileShareWitness"
+      "fileShareWitnessConfiguration": "CreateFileShareWitness.ps1\\CreateFileShareWitness",
+      "adPDCConfiguration": "CreateADPDC.ps1\\CreateADPDC",
+      "adBDCConfiguration": "ConfigureADBDC.ps1\\ConfigureADBDC",
+      "adBDCPreparation": "PrepareADBDC.ps1\\PrepareADBDC",
     }
   },
   "resources": [
@@ -428,6 +439,66 @@
           },
           "adBDCVMName": {
             "value": "[variables('configuration').virtualMachines.names.adbdc]"
+          },
+          "adPDCNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.adpdc]"
+          },
+          "adBDCNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.adbdc]"
+          },
+          "imagePublisher": {
+            "value": "[variables('configuration').virtualMachines.ad.publisher]"
+          },
+          "imageOffer": {
+            "value": "[variables('configuration').virtualMachines.ad.offer]"
+          },
+          "imageSKU": {
+            "value": "[variables('configuration').virtualMachines.ad.sku]"
+          },
+          "adVMSize": {
+            "value": "[variables('configuration').virtualMachines.ad.size]"
+          },
+          "adPDCIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adpdc]"
+          },
+          "adBDCIPAddress": {
+            "value": "[variables('configuration').network.privateIPAddresses.adbdc]"
+          },
+          "adAvailabiltySetName": {
+            "value": "[variables('configuration').network.availabilitySets.names.ad]"
+          },
+          "adDataDiskSize": {
+            "value": "[variables('configuration').virtualMachines.ad.diskSize]"
+          },
+          "adPDCModulesURL": {
+            "value": "[variables('modules').adPDC]"
+          },
+          "adPDCConfigurationFunction": {
+            "value": "[variables('functions').adPDCConfiguration]"
+          },
+          "adBDCConfigurationModulesURL": {
+            "value": "[variables('modules').adBDCConfigure]"
+          },
+          "adBDCConfigurationFunction": {
+            "value": "[variables('functions').adBDCConfiguration]"
+          },
+          "vnetwithDNSTemplateUri": {
+            "value": "[variables('templateLinks').vnetTemplate]"
+          },
+          "configureADBDCTemplateUri": {
+            "value": "[variables('templateLinks').configureADBDC]"
+          },
+          "nicTemplateUri": {
+            "value": "[variables('templateLinks').nicTemplate]"
+          },
+          "adSubnetRef": {
+            "value": "[variables('configuration').references.subnets.ad]"
+          },
+          "adBDCPreparationModulesURL": {
+            "value": "[variables('modules').adBDCPreparation]"
+          },
+          "adBDCPreparationFunction": {
+            "value": "[variables('functions').adBDCPreparation]"
           }
         }
       }
