@@ -116,7 +116,7 @@
       {
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sql0VMName'),'0/SqlVmIaasExtension')]",
+         "name":"[concat(parameters('sql0VMName'),'/SqlVmIaasExtension')]",
          "location":"[resourceGroup().location]",
          "properties":{
             "type":"SqlIaaSAgent",
@@ -145,7 +145,7 @@
       {
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sql1VMName'),'1/SqlVmIaasExtension')]",
+         "name":"[concat(parameters('sql1VMName'),'/SqlVmIaasExtension')]",
          "location":"[resourceGroup().location]",
          "properties":{
             "type":"SqlIaaSAgent",
@@ -173,7 +173,7 @@
       },
       {
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sql0VMName'),'0/sqlAOPrepare')]",
+         "name":"[concat(parameters('sql0VMName'),'/sqlAOPrepare')]",
          "apiVersion":"2015-06-15",
          "location":"[resourceGroup().location]",
          "dependsOn":[
