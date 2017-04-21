@@ -153,7 +153,7 @@
       "type": "bool"
     },
     "autoPatchingStartHour": {
-      "type": "int"
+      "type": "string"
     },
     "nicTemplateURL": {
       "type": "string"
