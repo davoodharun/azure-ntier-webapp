@@ -164,6 +164,32 @@
         "web": "[resourceId('Microsoft.Compute/availabilitySets', variables('configuration').network.availabilitySets.names.web)]"
       },
       "subnets": {
+        "list": [
+          {
+            "name": "[variables('configuration').network.subnets.names.ad]",
+            "properties": {
+              "addressPrefix": "[variables('configuration').network.subnets.addressRanges.ad]"
+            }
+          },
+          {
+            "name": "[variables('configuration').network.subnets.names.sql]",
+            "properties": {
+              "addressPrefix": "[variables('configuration').network.subnets.addressRanges.sql]"
+            }
+          },
+          {
+            "name": "[variables('configuration').network.subnets.names.mgt]",
+            "properties": {
+              "addressPrefix": "[variables('configuration').network.subnets.addressRanges.mgt]"
+            }
+          },
+          {
+            "name": "[variables('configuration').network.subnets.names.web]",
+            "properties": {
+              "addressPrefix": "[variables('configuration').network.subnets.addressRanges.web]"
+            }
+          }
+        ],
         "ad": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.ad)]",
         "mgt": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.mgt)]",
         "sql": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('configuration').network.virtualNetworkName, variables('configuration').network.subnets.names.sql)]",
@@ -186,17 +212,17 @@
       "loadBalancers": "[concat(parameters('artifactsLocation'),'loadbalancer.json')]",
       "sqlLoadBalancer": "[concat(parameters('artifactsLocation'),'/nestedtemplates/sqlLoadBalancer.json')]",
       "activeDirectory": "[concat(parameters('artifactsLocation'), 'activedirectory.json')]",
-      "vnetTemplate": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/vnet.json')]",
-      "configureADBDC": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/configureADBDC.json')]",
-      "nicTemplate": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/nic.json')]"
+      "vnetTemplate": "[concat(parameters('artifactsLocation'),'/nestedtemplates/updateVnetWithDNS.json')]",
+      "configureADBDC": "[concat(parameters('artifactsLocation'),'/nestedtemplates/configureADBDC.json')]",
+      "nicTemplate": "[concat(parameters('artifactsLocation'),'/nestedtemplates/nic.json')]"
     },
     "modules": {
       "createCluster": "[concat(parameters('artifactsLocation'),'/CreateFailoverCluster.ps1.zip')]",
       "sqlAOPrepare": "[concat(parameters('artifactsLocation'),'/PrepareAlwaysOnSqlServer.ps1.zip')]",
       "fileShareWitness": "[concat(parameters('artifactsLocation'),'/CreateFileShareWitness.ps1.zip')]",
       "adPDC": "[concat(parameters('artifactsLocation'),'/DSC/CreateADPDC.ps1.zip')]",
-      "adBDCConfigure": "[concat(parameters('_artifactsLocation'),'/DSC/ConfigureADBDC.ps1.zip')]",
-      "adBDCPreparation": "[concat(parameters('_artifactsLocation'),'/DSC/PrepareADBDC.ps1.zip', parameters('_artifactsLocationSasToken'))]",
+      "adBDCConfigure": "[concat(parameters('artifactsLocation'),'/DSC/ConfigureADBDC.ps1.zip')]",
+      "adBDCPreparation": "[concat(parameters('artifactsLocation'),'/DSC/PrepareADBDC.ps1.zip')]",
 
     },
     "functions": {
@@ -464,7 +490,7 @@
           "adBDCIPAddress": {
             "value": "[variables('configuration').network.privateIPAddresses.adbdc]"
           },
-          "adAvailabiltySetName": {
+          "adAvailabilitySetName": {
             "value": "[variables('configuration').network.availabilitySets.names.ad]"
           },
           "adDataDiskSize": {
@@ -492,13 +518,16 @@
             "value": "[variables('templateLinks').nicTemplate]"
           },
           "adSubnetRef": {
-            "value": "[variables('configuration').references.subnets.ad]"
+            "value": "[variables('references').subnets.ad]"
           },
           "adBDCPreparationModulesURL": {
             "value": "[variables('modules').adBDCPreparation]"
           },
           "adBDCPreparationFunction": {
             "value": "[variables('functions').adBDCPreparation]"
+          },
+          "subnets": {
+            "value": "[variables('references').subnets.list]"
           }
         }
       }
@@ -570,31 +599,31 @@
             "type": "[variables('configuration').virtualMachines.sqlw.size]"
           },
           "sql0StorageAccountName": {
-            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQL]"
           },
           "sql0StorageAccountType": {
-            "type": "[variables('storageAccounts').types.sql]"
+            "type": "[variables('configuration').storageAccounts.types.sql]"
           },
           "sql1StorageAccountName": {
-            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQL]"
           },
           "sql1StorageAccountType": {
-            "value": "[variables('storageAccounts').types.sql]"
+            "value": "[variables('configuration').storageAccounts.types.sql]"
           },
           "sqlwStorageAccountName": {
-            "value": "[variables('storageAccounts').names.vhdStorageAccountNameSQL]"
+            "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQL]"
           },
           "sqlwStorageAccountType": {
-            "value": "[variables('storageAccounts').types.sql]"
+            "value": "[variables('configuration').storageAccounts.types.sql]"
           },
           "sqlAvailabilitySetName": {
-            "type": "string"
+            "type": "[variables('configuration').network.availabilitySets.names.sql]"
           },
           "sqlwNicName": {
-            "type": "string"
+            "type": "[variables('configuration').network.networkInterfaces.names.sqlw]"
           },
           "sqlNicName": {
-            "type": "string"
+            "type": "[variables('configuration').network.networkInterfaces.sql0]"
           },
           "nicTemplateURL": {
             "value": "[variables('templateLinks').updateNic]"
@@ -624,7 +653,7 @@
             "type": "[variables('functions').fileShareWitnessConfiguration]"
           },
           "sqlSubnetRef": {
-            "value": "[variables('configuration').network.subnets.ids.sql]"
+            "value": "[variables('references').subnets.sql]"
           },
           "adPDCNicIPAddress": {
             "value": "[variables('configuration').network.privateIPAddresses.adpdc]"

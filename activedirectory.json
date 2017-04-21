@@ -14,6 +14,9 @@
     "adSubnetPrefix": {
       "type": "string"
     },
+    "subnets": {
+      "type": "array"
+    },
     "adminUsername": {
       "type": "string"
     },
@@ -273,11 +276,8 @@
           "virtualNetworkAddressRange": {
             "value": "[parameters('virtualNetworkAddressRange')]"
           },
-          "subnetName": {
-            "value": "[parameters('adSubnetName')]"
-          },
-          "subnetRange": {
-            "value": "[parameters('adSubnetPrefix')]"
+          "subnets": {
+            "value": "[parameters('subnets')]"
           },
           "DNSServerAddress": {
             "value": [
@@ -461,11 +461,8 @@
           "virtualNetworkAddressRange": {
             "value": "[parameters('virtualNetworkAddressRange')]"
           },
-          "subnetName": {
-            "value": "[parameters('adSubnetName')]"
-          },
-          "subnetRange": {
-            "value": "[parameters('adSubnetPrefix')]"
+          "subnets": {
+            "value": "[parameters('subnets')]"
           },
           "DNSServerAddress": {
             "value": [
