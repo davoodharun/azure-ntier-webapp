@@ -156,7 +156,8 @@
       "workloadType": "GENERAL",
       "autoPatchingDay": "Sunday",
       "autoPatchingStartHour": 2,
-      "numberOfSqlVMDisks": "2"
+      "numberOfSqlVMDisks": "2",
+      "autoPatchEnable": true
     },
     "references": {
       "availabilitySets": {

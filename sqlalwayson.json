@@ -541,7 +541,7 @@
             "value": "[parameters('sqlAOEPName')]"
           },
           "sqlServerServiceAccountUserName": {
-            "value": "[parameters('sqlServerServiceAccountUserName')]"
+            "value": "[parameters('adminUsername')]"
           },
           "sqlServerServiceAccountPassword": {
             "value": "[parameters('adminPassword')]"

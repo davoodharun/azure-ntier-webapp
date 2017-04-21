@@ -155,8 +155,8 @@
                },
                "AutoPatchingSettings":{
                   "PatchCategory":"WindowsMandatoryUpdates",
-                  "Enable":"[parameters('autoPatchingEnable')]",
-                  "DayOfWeek":"[variables(string(variables(parameters('autoPatchingDay'))))]",
+                  "Enable":true,
+                  "DayOfWeek":"[parameters('autoPatchingDay')]",
                   "MaintenanceWindowStartingHour":"[mod(add(int(parameters('autoPatchingStartHour')),2),24)]",
                   "MaintenanceWindowDuration":"60"
                },
