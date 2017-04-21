@@ -50,13 +50,37 @@
     "sqlwImageOffer": {
       "type": "string"
     },
+    "sqlwImageSKU": {
+      "type": "string"
+    },
+    "sqlNicName": {
+      "type": "string"
+    },
+    "sqlAOEPName": {
+      "type": "string"
+    },
+    "sharePath": {
+      "type": "string"
+    },
+    "clusterName": {
+      "type": "string"
+    },
     "sql0StorageAccountName": {
+      "type": "string"
+    },
+    "sql0StorageAccountType": {
       "type": "string"
     },
     "sql1StorageAccountName": {
       "type": "string"
     },
+    "sql1StorageAccountType": {
+      "type": "string"
+    },
     "sqlwStorageAccountName": {
+      "type": "string"
+    },
+    "sqlwStorageAccountType": {
       "type": "string"
     },
     "sqlAvailabilitySetName": {
