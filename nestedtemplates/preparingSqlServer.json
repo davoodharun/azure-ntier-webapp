@@ -178,7 +178,7 @@
          "location":"[resourceGroup().location]",
          "dependsOn":[
             "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/CreateFileShareWitness')]",
-            "[concat('Microsoft.Compute/virtualMachines/',parameters('sql0VMName'),'0/extensions/SqlVmIaasExtension')]"
+            "[concat('Microsoft.Compute/virtualMachines/',parameters('sql0VMName'),'/extensions/SqlVmIaasExtension')]"
          ],
          "properties":{
             "publisher":"Microsoft.Powershell",
