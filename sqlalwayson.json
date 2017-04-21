@@ -65,6 +65,12 @@
     "clusterName": {
       "type": "string"
     },
+    "numberOfDisks": {
+      "type": "string"
+    },
+    "autoPatchingDay": {
+      "type": "string"
+    },
     "sql0StorageAccountName": {
       "type": "string"
     },
