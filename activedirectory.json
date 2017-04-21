@@ -124,7 +124,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/','osdisk.vhd')]"
+                "uri": "[concat('http://', parameters('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/',parameters('adPDCVMName'),'-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -132,7 +132,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds0/', variables('adPDCDataDisk'),'-1.vhd')]"
+                "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adPDCVMName'),'data-1.vhd')]"
               },
               "name": "[concat(variables('adPDCVMName'),'-data-disk1')]",
               "caching": "None",
@@ -284,7 +284,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/','osdisk.vhd')]"
+              "uri": "[concat('http://', parameters('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/',parameters('adBDCVMName'),'-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -292,7 +292,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))).primaryEndpoints.blob,'vhds1/',variables('adBDCDataDisk'),'-1.vhd')]"
+                "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adBDCVMName'),'data-1.vhd')]"
               },
               "name": "[concat(variables('adBDCVMName'),'-data-disk1')]",
               "caching": "None",
