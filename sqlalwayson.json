@@ -154,6 +154,9 @@
     },
     "autoPatchingStartHour": {
       "type": "int"
+    },
+    "nicTemplateURL": {
+      "type": "string"
     }
   },
   "variables": {
@@ -416,7 +419,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('configuration').nicTemplateURL]",
+          "uri": "[parameters('nicTemplateURL')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {

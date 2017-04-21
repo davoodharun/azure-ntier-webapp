@@ -118,24 +118,25 @@
           "name": "sql0-vm",
           "offer": "SQL2016-WS2012R2",
           "publisher": "MicrosoftSQLServer",
-          "sku": "SQL2016-WS2012R2",
-          "size":"Standard_DS2_v2"
+          "sku": "Enterprise",
+          "size":"Standard_D2_v2"
         },
         "sql1":{
           "name": "sql1-vm",
           "offer": "SQL2016-WS2012R2",
           "publisher": "MicrosoftSQLServer",
-          "sku": "SQL2016-WS2012R2",
-          "size":"Standard_DS2_v2"
+          "sku": "Enterprise",
+          "size":"Standard_D2_v2"
         },
         "sqlw":{
           "name": "sqlw-vm",
-          "offer": "SQL2016-WS2012R2",
-          "publisher": "MicrosoftSQLServer",
-          "sku": "SQL2016-WS2012R2",
-          "size":"Standard_DS2_v2"
+          "offer": "WindowsServer",
+          "publisher": "MicrosoftWindowsServer",
+          "sku": "2016-Datacenter",
+          "size":"Standard_D1_v2"
         },
         "mgt":{
+          "name": "mgt-vm",
           "offer": "WindowsServer",
           "publisher": "MicrosoftWindowsServer",
           "sku": "2016-Datacenter",
@@ -701,6 +702,9 @@
           },
           "autoPatchingEnable": {
             "value": "[variables('configuration').autoPatchingDay]"
+          },
+          "nicTemplateURL": {
+            "value": "[variables('templateLinks').updateNic]"
           }
         }
       }
