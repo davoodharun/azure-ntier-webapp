@@ -153,7 +153,7 @@
       "type": "string"
     },
     "autoPatchingStartHour": {
-      "type": "string"
+      "type": "int"
     }
   },
   "variables": {
