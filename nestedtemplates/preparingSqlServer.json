@@ -2,7 +2,10 @@
    "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
    "contentVersion":"1.0.0.0",
    "parameters":{
-      "sqlVMName":{
+      "sql0VMName":{
+         "type":"string"
+      },
+      "sql1VMName":{
          "type":"string"
       },
       "adminUsername":{
@@ -170,12 +173,12 @@
       },
       {
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sqlVMName'),'0/sqlAOPrepare')]",
+         "name":"[concat(parameters('sql0VMName'),'0/sqlAOPrepare')]",
          "apiVersion":"2015-06-15",
          "location":"[resourceGroup().location]",
          "dependsOn":[
             "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlwVMName'),'/extensions/CreateFileShareWitness')]",
-            "[concat('Microsoft.Compute/virtualMachines/',parameters('sqlVMName'),'0/extensions/SqlVmIaasExtension')]"
+            "[concat('Microsoft.Compute/virtualMachines/',parameters('sql0VMName'),'0/extensions/SqlVmIaasExtension')]"
          ],
          "properties":{
             "publisher":"Microsoft.Powershell",

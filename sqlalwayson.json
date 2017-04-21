@@ -516,8 +516,11 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "sqlVMName": {
+          "sql0VMName": {
             "value": "[parameters('sql0VMName')]"
+          },
+          "sql1VMName": {
+            "value": "[parameters('sql1VMName')]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
