@@ -113,7 +113,7 @@
       {
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sqlVMName'),'0/SqlVmIaasExtension')]",
+         "name":"[concat(parameters('sql0VMName'),'0/SqlVmIaasExtension')]",
          "location":"[resourceGroup().location]",
          "properties":{
             "type":"SqlIaaSAgent",
@@ -142,7 +142,7 @@
       {
          "apiVersion":"2015-06-15",
          "type":"Microsoft.Compute/virtualMachines/extensions",
-         "name":"[concat(parameters('sqlVMName'),'1/SqlVmIaasExtension')]",
+         "name":"[concat(parameters('sql1VMName'),'1/SqlVmIaasExtension')]",
          "location":"[resourceGroup().location]",
          "properties":{
             "type":"SqlIaaSAgent",
