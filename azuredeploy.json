@@ -39,7 +39,7 @@
             "web": "10.0.3.0/24",
             "mgt": "10.0.2.0/24",
             "sql": "10.0.1.0/24",
-            "ad": "10.0.0.0/24",
+            "ad": "10.0.0.0/24"
           }
         },
         "networkInterfaces": {
@@ -329,7 +329,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork",
+        "Microsoft.Resources/deployments/VirtualNetwork"
       ],
       "properties": {
         "mode": "Incremental",
@@ -377,7 +377,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork",
+        "Microsoft.Resources/deployments/VirtualNetwork"
       ],
       "properties": {
         "mode": "Incremental",
@@ -422,7 +422,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork",
+        "Microsoft.Resources/deployments/VirtualNetwork"
       ],
       "properties": {
         "mode": "Incremental",

@@ -102,9 +102,6 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))]"
-      ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('adVMSize')]"
@@ -265,9 +262,6 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('vhdStorageAccountName'))]"
-      ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('adVMSize')]"
