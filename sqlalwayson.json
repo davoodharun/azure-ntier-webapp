@@ -364,9 +364,9 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -409,9 +409,9 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQLWNic",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -454,9 +454,9 @@
       "apiVersion": "2015-01-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/UpdatingSQL0Nic",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
-        "[contact('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sqlwVMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql0VMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('sql1VMName'))]"
       ],
       "properties": {
         "mode": "Incremental",

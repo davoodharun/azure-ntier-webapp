@@ -154,7 +154,8 @@
       "numberOfDisks": 2,
       "workloadType": "GENERAL",
       "autoPatchingDay": "Sunday",
-      "autoPatchingStartHour": 2
+      "autoPatchingStartHour": 2,
+      "numberOfSqlVMDisks": "2"
     },
     "references": {
       "availabilitySets": {
@@ -602,6 +603,9 @@
           "sql0StorageAccountName": {
             "value": "[variables('configuration').storageAccounts.names.vhdStorageAccountNameSQL]"
           },
+          "diagnosticsStorageAccountNameSQL": {
+            "value": "[variables('configuration').storageAccounts.names.diagnosticsStorageAccountNameSQL]"
+          },
           "sql0StorageAccountType": {
             "value": "[variables('configuration').storageAccounts.types.sql]"
           },
@@ -624,6 +628,12 @@
             "value": "[variables('configuration').network.networkInterfaces.names.sqlw]"
           },
           "sqlNicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.sql0]"
+          },
+          "sql1NicName": {
+            "value": "[variables('configuration').network.networkInterfaces.names.sql1]"
+          },
+          "sql0NicName": {
             "value": "[variables('configuration').network.networkInterfaces.names.sql0]"
           },
           "nicTemplateURL": {
@@ -685,6 +695,12 @@
           },
           "autoPatchingStartHour": {
             "value": "[variables('configuration').autoPatchingStartHour]"
+          },
+          "numberOfSqlVMDisks": {
+            "value": "[variables('configuration').numberOfSqlVMDisks]"
+          },
+          "autoPatchingEnable": {
+            "value": "[variables('configuration').autoPatchingDay]"
           }
         }
       }
