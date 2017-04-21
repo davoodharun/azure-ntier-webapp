@@ -97,6 +97,16 @@
         }
       },
       "virtualMachines": {
+        "names": {
+          "mgt": "10.0.2.4",
+          "adpdc": "adpdc-vm",
+          "adbdc": "adbdc-vm",
+          "sql1": "10.0.1.4",
+          "sql0": "10.0.1.5",
+          "sqlw": "10.0.1.6",
+          "sqlLB": "10.0.1.7",
+          "web": "web"
+        },
         "ad": {
           "offer": "WindowsServer",
           "publisher": "MicrosoftWindowsServer",
@@ -412,6 +422,12 @@
           },
           "domainName": {
             "value": "[variables('configuration').network.domainName]"
+          },
+          "adPDCVMName": {
+            "value": "[variables('configuration').virtualMachines.names.adpdc]"
+          },
+          "adBDCVMName": {
+            "value": "[variables('configuration').virtualMachines.names.adbdc]"
           }
         }
       }

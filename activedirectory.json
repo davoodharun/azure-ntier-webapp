@@ -52,6 +52,12 @@
     },
     "domainName": {
       "type": "string"
+    },
+    "adBDCVMName": {
+      "type": "string"
+    },
+    "adPDCVMName": {
+      "type": "string"
     }
   },
   "variables": {
@@ -98,7 +104,7 @@
       }
     },
     {
-      "name": "[variables('adPDCVMName')]",
+      "name": "[parameters('adPDCVMName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
@@ -110,7 +116,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computerName": "[variables('adPDCVMName')]",
+          "computerName": "[parameters('adPDCVMName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -134,7 +140,7 @@
               "vhd": {
                 "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adPDCVMName'),'data-1.vhd')]"
               },
-              "name": "[concat(variables('adPDCVMName'),'-data-disk1')]",
+              "name": "[concat(parameters('adPDCVMName'),'-data-disk1')]",
               "caching": "None",
               "diskSizeGB": "[variables('adDataDiskSize')]",
               "lun": 0,
@@ -157,7 +163,7 @@
           "apiVersion": "2016-03-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines', variables('adPDCVMName'))]"
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adPDCVMName'))]"
           ],
           "properties": {
             "publisher": "Microsoft.Powershell",
@@ -189,7 +195,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('adPDCVMName'),'/extensions/CreateADForest')]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'),'/extensions/CreateADForest')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -258,7 +264,7 @@
       }
     },
     {
-      "name": "[variables('adBDCVMName')]",
+      "name": "[parameters('adBDCVMName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
@@ -270,7 +276,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('adAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computerName": "[variables('adBDCVMName')]",
+          "computerName": "[parameters('adBDCVMName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -294,7 +300,7 @@
               "vhd": {
                 "uri": "[concat('http://',variables('vhdStorageAccountName'),'.blob.core.usgovcloudapi.net/','vhd','/', parameters('adBDCVMName'),'data-1.vhd')]"
               },
-              "name": "[concat(variables('adBDCVMName'),'-data-disk1')]",
+              "name": "[concat(parameters('adBDCVMName'),'-data-disk1')]",
               "caching": "None",
               "diskSizeGB": "[variables('adDataDiskSize')]",
               "lun": 0,
@@ -313,11 +319,11 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('adBDCVMName'),'/PrepareBDC')]",
+      "name": "[concat(parameters('adBDCVMName'),'/PrepareBDC')]",
       "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('adBDCVMName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adBDCVMName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Powershell",
@@ -338,7 +344,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',variables('adBDCVMName'),'/extensions/PrepareBDC')]",
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('adBDCVMName'),'/extensions/PrepareBDC')]",
         "Microsoft.Resources/deployments/UpdateBDCNIC"
       ],
       "properties": {
@@ -349,7 +355,7 @@
         },
         "parameters": {
           "adBDCVMName": {
-            "value": "[variables('adBDCVMName')]"
+            "value": "[parameters('adBDCVMName')]"
           },
           "location": {
             "value": "[resourceGroup().location]"
