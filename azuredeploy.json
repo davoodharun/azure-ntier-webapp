@@ -428,7 +428,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/VirtualNetwork"
+        "Microsoft.Resources/deployments/LoadBalancers"
       ],
       "properties": {
         "mode": "Incremental",
@@ -542,7 +542,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/LoadBalancers"
+        "Microsoft.Resources/deployments/ActiveDirectory"
       ],
       "properties": {
         "mode": "Incremental",
