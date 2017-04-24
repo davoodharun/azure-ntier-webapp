@@ -112,7 +112,7 @@
           "publisher": "MicrosoftWindowsServer",
           "sku": "2016-Datacenter",
           "size":"Standard_DS2_v2",
-          "diskSize": 1000,
+          "diskSize": 128,
         },
         "sql0":{
           "name": "sql0-vm",

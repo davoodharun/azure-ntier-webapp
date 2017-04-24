@@ -127,48 +127,8 @@
     }
   },
   "variables": {
-    "dnsPrefix": "bprintaz",
-    "domainName": "mydomain.local",
-    "adAvailabilitySetName": "adAvailabiltySet",
-    "publicIPAddressName": "ad-lb-pip",
-    "adPDCNicName": "adPDCNic",
-    "adBDCNicName": "adBDCNic",
-    "adPDCVMName": "adPDC",
-    "adBDCVMName": "adBDC",
-    "adPDCDataDisk": "ADPDCDataDisk",
-    "adBDCDataDisk": "ADBDCDataDisk",
-    "adVMSize": "Standard_DS2_v2",
-    "adDataDiskSize": 1000,
-    "adSubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('adSubnetName'))]",
-    "adPDCNicIPAddress": "[concat(split(parameters('adSubnetPrefix'), '0/')[0], '4')]",
-    "adBDCNicIPAddress": "[concat(split(parameters('adSubnetPrefix'), '0/')[0], '5')]",
-    "imagePublisher": "MicrosoftWindowsServer",
-    "imageOffer": "WindowsServer",
-    "imageSKU": "2016-Datacenter",
-    "configureADBDCTemplateUri": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/configureADBDC.json', parameters('_artifactsLocationSasToken'))]",
-    "adPDCModulesURL": "[concat(parameters('_artifactsLocation'),'/DSC/CreateADPDC.ps1.zip', parameters('_artifactsLocationSasToken'))]",
-    "adPDCConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
-    "adBDCPreparationModulesURL": "[concat(parameters('_artifactsLocation'),'/DSC/PrepareADBDC.ps1.zip', parameters('_artifactsLocationSasToken'))]",
-    "adBDCPreparationFunction": "PrepareADBDC.ps1\\PrepareADBDC",
-    "adBDCConfigurationModulesURL": "[concat(parameters('_artifactsLocation'),'/DSC/ConfigureADBDC.ps1.zip', parameters('_artifactsLocationSasToken'))]",
-    "adBDCConfigurationFunction": "ConfigureADBDC.ps1\\ConfigureADBDC",
-    "vnetwithDNSTemplateUri": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/vnet-with-dns-server.json', parameters('_artifactsLocationSasToken'))]",
-    "vnetTemplateUri": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken'))]",
-    "nicTemplateUri": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/nic.json', parameters('_artifactsLocationSasToken'))]"
   },
   "resources": [
-    {
-      "name": "[variables('publicIPAddressName')]",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2016-10-01",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "publicIPAllocationMethod": "Dynamic",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsPrefix')]"
-        }
-      }
-    },
     {
       "name": "[parameters('adPDCVMName')]",
       "type": "Microsoft.Compute/virtualMachines",
