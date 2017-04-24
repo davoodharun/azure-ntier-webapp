@@ -14,6 +14,12 @@
         "description": "The name of the Administrator of the new VMs and Domain"
       }
     },
+    "sqlServerServiceAccountPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The name of the Administrator of the new VMs and Domain"
+      }
+    },
     "environment":{
       "type": "string",
       "metadata": {
@@ -23,14 +29,6 @@
         "stag",
         "prod"
       ]
-    },
-    "keyVaultName": {
-      "type": "string",
-      "defaultValue": "QuestionMarkKeyVault"
-    },
-    "orchestrationResourceGroupName": {
-      "type": "string",
-      "defaultValue": "QuestionmarkOrchestration"
     },
     "sasTokenTemplates": {
       "type": "string",
@@ -524,14 +522,14 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "default": "https://github.com/davoodharun/azure-ntier-webapp/nestedtemplates"
+      "defaultValue": "https://github.com/davoodharun/azure-ntier-webapp/nestedtemplates"
     },
     "scriptsBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "default": "https://github.com/davoodharun/azure-ntier-webapp/DSC"
+      "defaultValue": "https://github.com/davoodharun/azure-ntier-webapp/DSC"
     },
     "autoPatchingDay": {
       "type": "string",
@@ -1401,12 +1399,7 @@
             "value": "[parameters('sqlServerServiceAccountUserName')]"
           },
           "sqlServerServiceAccountPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[variables('keyVaultId')]"
-              },
-              "secretName": "sqlServerServiceAccountPassword"
-            }
+            "value": "[parameters('sqlServerServicePassword')]"
           },
           "sharePath": {
             "value": "[variables('sharePath')]"
@@ -1477,12 +1470,7 @@
             "value": "[parameters('sqlServerServiceAccountUserName')]"
           },
           "sqlServerServiceAccountPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[variables('keyVaultId')]"
-              },
-              "secretName": "sqlServerServiceAccountPassword"
-            }
+            "value": "[parameters('sqlServerServicePassword')]"
           },
           "createClusterModulesURL": {
             "value": "[variables('configuration').createClusterModulesURL]"
