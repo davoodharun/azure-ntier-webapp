@@ -188,7 +188,6 @@
             "autoUpgradeMinorVersion":false,
             "settings":{
                "modulesURL":"[parameters('sqlAOPrepareModulesURL')]",
-               "WmfVersion":"5.0",
                "configurationFunction":"[parameters('sqlAOPrepareConfigurationFunction')]",
                "properties":{
                   "domainName":"[parameters('domainName')]",
