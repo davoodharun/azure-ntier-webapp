@@ -163,6 +163,9 @@
     },
     "adPDCVMName": {
       "type": "string"
+    },
+    "sqlBEAddressPoolID": {
+      "type": "string"
     }
   },
   "variables": {
@@ -443,7 +446,12 @@
                   "privateIPAllocationMethod": "Dynamic",
                   "subnet": {
                     "id": "[parameters('sqlSubnetRef')]"
-                  }
+                  },
+                  "loadBalancerBackendAddressPools": [
+                    {
+                      "id": "[parameters('derivedIds').sqlBEAddressPoolID]"
+                    }
+                  ]
                 }
               }
             ]
@@ -488,7 +496,12 @@
                   "privateIPAllocationMethod": "Dynamic",
                   "subnet": {
                     "id": "[parameters('sqlSubnetRef')]"
-                  }
+                  },
+                  "loadBalancerBackendAddressPools": [
+                    {
+                      "id": "[parameters('derivedIds').sqlBEAddressPoolID]"
+                    }
+                  ]
                 }
               }
             ]

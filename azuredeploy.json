@@ -428,7 +428,7 @@
       "apiVersion": "2015-01-01",
       "comments": "",
       "dependsOn": [
-        "Microsoft.Resources/deployments/LoadBalancers"
+        "Microsoft.Resources/deployments/VirtualNetwork"
       ],
       "properties": {
         "mode": "Incremental",
@@ -712,6 +712,9 @@
           },
           "adPDCVMName": {
             "value": "[variables('configuration').virtualMachines.names.adpdc]"
+          },
+          "sqlBEAddressPoolID": {
+            "value": "[variables('derivedReferences').sqlBEAddressPoolID]"
           }
         }
       }
