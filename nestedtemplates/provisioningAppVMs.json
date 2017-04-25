@@ -2,31 +2,31 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "numberOfDELInstances": {
+    "numberOfWebInstances": {
       "type": "int",
       "defaultValue": 2,
       "minValue": 2,
       "maxValue": 5
     },
-    "DELVMName": {
+    "WebVMName": {
       "type": "string"
     },
     "MGTVMName": {
       "type": "string"
     },
-    "DELAvailabilitySetName": {
+    "WebAvailabilitySetName": {
       "type": "string"
     },
     "MGTAvailabilitySetName": {
       "type": "string"
     },
-    "DELStorageAccountName": {
+    "WebStorageAccountName": {
       "type": "string"
     },
     "MGTStorageAccountName": {
       "type": "string"
     },
-    "DELStorageAccountType": {
+    "WebStorageAccountType": {
       "type": "string"
     },
     "MGTStorageAccountType": {
@@ -35,13 +35,13 @@
     "location": {
       "type": "string"
     },
-    "DELVMSize": {
+    "WebVMSize": {
       "type": "string"
     },
     "MGTVMSize": {
       "type": "string"
     },
-    "DELNICName": {
+    "WEBNICName": {
       "type": "string"
     },
     "MGTNICName": {
@@ -86,7 +86,7 @@
     "staticIPDELStart": {
       "type": "int"
     },
-    "delNSGid": {
+    "webNSGid": {
       "type": "string"
     },
     "mgtNSGid": {
@@ -99,11 +99,11 @@
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('DELStorageAccountName')]",
+      "name": "[parameters('WebStorageAccountName')]",
       "apiVersion": "2015-05-01-preview",
       "location": "[resourceGroup().location]",
       "properties": {
-        "accountType": "[parameters('DELStorageAccountType')]"
+        "accountType": "[parameters('WebStorageAccountType')]"
       }
     },
     {
@@ -117,7 +117,7 @@
     },
     {
       "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('DELAvailabilitySetName')]",
+      "name": "[parameters('WebAvailabilitySetName')]",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
       "properties": {
@@ -138,11 +138,11 @@
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('DELNICName'), copyindex())]",
+      "name": "[concat(parameters('WEBNICName'), copyindex())]",
       "location": "[resourceGroup().location]",
       "copy": {
         "name": "nicLoopDEL",
-        "count": "[parameters('numberOfDELInstances')]"
+        "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
       ],
@@ -192,26 +192,26 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('DELVMName'), copyindex())]",
+      "name": "[concat(parameters('WebVMName'), copyindex())]",
       "location": "[parameters('location')]",
       "copy": {
         "name": "vmLoopDEL",
-        "count": "[parameters('numberOfDELInstances')]"
+        "count": "[parameters('numberOfWebInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('DELStorageAccountName'))]",
-        "[concat('Microsoft.Compute/availabilitySets/', parameters('DELAvailabilitySetName'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('DELNICName'), copyindex()))]"
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('WebStorageAccountName'))]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('WebAvailabilitySetName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('WEBNICName'), copyindex()))]"
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('DELVMSize')]"
+          "vmSize": "[parameters('WebVMSize')]"
         },
         "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('DELAvailabilitySetName'))]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('WebAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[replace(concat(parameters('DELVMName'), copyindex()),'-','')]",
+          "computername": "[replace(concat(parameters('WebVMName'), copyindex()),'-','')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -225,7 +225,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://',parameters('DELStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('DELVMName'), copyindex(), '-osdisk.vhd')]"
+              "uri": "[concat('http://',parameters('WebStorageAccountName'),'.blob.core.usgovcloudapi.net/',parameters('vmContainerName'),'/',parameters('WebVMName'), copyindex(), '-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -234,7 +234,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat(parameters('DELNICName'), copyindex()))]"
+              "id": "[resourceId(resourceGroup().name,'Microsoft.Network/networkInterfaces', concat(parameters('WEBNICName'), copyindex()))]"
             }
           ]
         }
@@ -317,13 +317,13 @@
         "comments": "Join domain - JsonADDomainExtension",
         "apiVersion": "2015-06-15",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('DELVMName'), copyindex(), '/joindomain')]",
+        "name": "[concat(parameters('WebVMName'), copyindex(), '/joindomain')]",
         "copy": {
           "name": "extensionLoopDEL",
-          "count": "[parameters('numberOfDELInstances')]"
+          "count": "[parameters('numberOfWebInstances')]"
         },
         "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('DELVMName'), copyindex()))]"
+          "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('WebVMName'), copyindex()))]"
         ],
         "location": "[parameters('location')]",
         "properties": {

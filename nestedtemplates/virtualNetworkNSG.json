@@ -2,9 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "nsgName": {
-      "type": "string"
-    },
     "location": {
       "type": "string"
     },
@@ -23,7 +20,7 @@
     "sqlNSGName": {
       "type": "string"
     },
-    "delNSGName": {
+    "webNSGName": {
       "type": "string"
     },
     "mgtNSGName": {
@@ -481,9 +478,9 @@
         "dependsOn": []
     },
     {
-        "comments": "DEL NSG",
+        "comments": "WEB NSG",
         "type": "Microsoft.Network/networkSecurityGroups",
-        "name": "[parameters('delNSGName')]",
+        "name": "[parameters('webNSGName')]",
         "apiVersion": "2016-03-30",
         "location": "[parameters('location')]",
         "properties": {

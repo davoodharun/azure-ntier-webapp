@@ -38,12 +38,6 @@
       "type": "string",
       "defaultValue": ""
     },
-    "numberOfDELInstances": {
-      "type": "int",
-      "defaultValue": 2,
-      "minValue": 2,
-      "maxValue": 5
-    },
     "numberOfWebInstances": {
       "type": "int",
       "defaultValue": 2,
@@ -135,41 +129,7 @@
       },
       "defaultValue": "Standard_D2_v2"
     },
-    "SHRVMSize": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_DS1",
-        "Standard_DS2",
-        "Standard_DS3",
-        "Standard_DS4",
-        "Standard_DS11",
-        "Standard_DS12",
-        "Standard_DS13",
-        "Standard_DS14",
-        "Standard_DS1_v2",
-        "Standard_DS2_v2",
-        "Standard_D2_v2",
-        "Standard_DS3_v2",
-        "Standard_DS4_v2",
-        "Standard_DS5_v2",
-        "Standard_DS11_v2",
-        "Standard_DS12_v2",
-        "Standard_DS13_v2",
-        "Standard_DS14_v2",
-        "Standard_DS15_v2",
-        "Standard_GS1",
-        "Standard_GS2",
-        "Standard_GS3",
-        "Standard_GS4",
-        "Standard_GS4",
-        "Standard_GS5"
-      ],
-      "metadata": {
-        "description": "The size of the SQL VMs Created"
-      },
-      "defaultValue": "Standard_D2_v2"
-    },
-    "DELVMSize": {
+    "WebVMSize": {
       "type": "string",
       "allowedValues": [
         "Standard_DS1",
@@ -202,40 +162,6 @@
         "description": "The size of the SQL VMs Created"
       },
       "defaultValue": "Standard_D2_v2"
-    },
-    "CFGVMSize": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_DS1",
-        "Standard_DS2",
-        "Standard_D1_v2",
-        "Standard_DS3",
-        "Standard_DS4",
-        "Standard_DS11",
-        "Standard_DS12",
-        "Standard_DS13",
-        "Standard_DS14",
-        "Standard_DS1_v2",
-        "Standard_DS2_v2",
-        "Standard_DS3_v2",
-        "Standard_DS4_v2",
-        "Standard_DS5_v2",
-        "Standard_DS11_v2",
-        "Standard_DS12_v2",
-        "Standard_DS13_v2",
-        "Standard_DS14_v2",
-        "Standard_DS15_v2",
-        "Standard_GS1",
-        "Standard_GS2",
-        "Standard_GS3",
-        "Standard_GS4",
-        "Standard_GS4",
-        "Standard_GS5"
-      ],
-      "metadata": {
-        "description": "The size of the SQL VMs Created"
-      },
-      "defaultValue": "Standard_D1_v2"
     },
     "MGTVMSize": {
       "type": "string",
@@ -347,33 +273,7 @@
       },
       "defaultValue": "Standard_LRS"
     },
-    "SHRStorageAccountType": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "The type of the DC Storage Account created"
-      },
-      "defaultValue": "Standard_LRS"
-    },
-    "DELStorageAccountType": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "The type of the DC Storage Account created"
-      },
-      "defaultValue": "Standard_LRS"
-    },
-    "CFGStorageAccountType": {
+    "WebStorageAccountType": {
       "type": "string",
       "allowedValues": [
         "Standard_LRS",
@@ -464,26 +364,12 @@
       },
       "defaultValue": "10.200.1.6"
     },
-    "SHRNICIPAddresses": {
-      "type": "array",
-      "metadata": {
-        "description": "The IP address of the new backup AD VM"
-      },
-      "defaultValue": [{"IpAddress":"10.200.0.6"}, {"IpAddress":"10.200.0.7"}]
-    },
-    "DELNICIPAddresses": {
+    "WebNicIPAddresses": {
       "type": "array",
       "metadata": {
         "description": "The IP address of the new backup AD VM"
       },
       "defaultValue": [{"IpAddress":"10.200.0.8"}, {"IpAddress":"10.200.0.9"}]
-    },
-    "CFGNICIPAddress": {
-      "type": "string",
-      "metadata": {
-        "description": "The IP address of the new backup AD VM"
-      },
-      "defaultValue": "10.200.0.4"
     },
     "MGTNICIPAddress": {
       "type": "string",
@@ -655,13 +541,11 @@
     "applicationGatewayNSGName": "applicationGatewayNSG",
     "MGTNSGName": "[concat('MGTNSG', parameters('environment'))]",
     "DCNSGName": "[concat('DCNSG', parameters('environment'))]",
-    "DELNSGName": "[concat('DELNSG', parameters('environment'))]",
+    "webNSGName": "[concat('WEBNSG', parameters('environment'))]",
     "SQLNSGName": "[concat('SQLNSG', parameters('environment'))]",
     "LBNSGName": "[concat('LBNSG', parameters('environment'))]",
-    "numberOfDELInstances": "[length(parameters('DELNICIPAddresses'))]",
-    "numberOfSHRInstances": "[length(parameters('SHRNICIPAddresses'))]",
-    "staticIPSHRStart": 6,
-    "staticIPDELStart": "[add(variables('staticIPSHRStart'), variables('numberOfSHRInstances'))]",
+    "numberOfWebInstances": "[length(parameters('WebNicIPAddresses'))]",
+    "staticIPWEBStart": 6,
     "RDPNAT": "RDP",
     "SQLAOProbe": "SQLAlwaysOnEndPointProbe",
     "primaryDCIPAddressName": "primaryDCIP",
@@ -672,7 +556,7 @@
       "availabilitySets": {
         "sqlAvailabilitySetName": "[concat('sqlAvailabilitySet', parameters('environment'))]",
         "adAvailabilitySetName": "[concat('adAvailabilitySet-', parameters('environment'))]",
-        "DELAvailabilitySetName": "[concat('DEL_AvailabilitySet-', parameters('environment'))]",
+        "WebAvailabilitySetName": "[concat('WEB_AvailabilitySet-', parameters('environment'))]",
         "MGTAvailbilitySetName": "[concat('MGT_AvailabilitySet-', parameters('environment'))]"
       },
       "noOfSqlVMs": 2,
@@ -681,7 +565,7 @@
       "adBDCVMName": "[concat('AZ-BDC-VM-', parameters('environment'))]",
       "sqlVMName": "[concat(parameters('environment'), 'sqlserver-')]",
       "sqlwVMName": "[concat('cluster-fsw', parameters('environment'))]",
-      "DELVMName": "[concat('AZ-DEL-VM', parameters('environment'))]",
+      "WebVMName": "[concat('AZ-WEB-VM', parameters('environment'))]",
       "MGTVMName": "[concat('AZ-MGT-VM', parameters('environment'))]",
       "windowsImagePublisher": "MicrosoftWindowsServer",
       "windowsImageOffer": "WindowsServer",
@@ -701,7 +585,7 @@
     "adBDCNicName": "[concat('adBDC-nic', parameters('environment'))]",
     "sqlwNicName": "[concat('sqlw-nic', parameters('environment'))]",
     "sqlNicName": "[concat('sql-nic', parameters('environment'))]",
-    "DELNICName": "[concat('DEL-nic', parameters('environment'))]",
+    "WEBNICName": "[concat('WEB-nic', parameters('environment'))]",
     "MGTNICName": "[concat('MGT-nic', parameters('environment'))]",
     "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
     "staticSubnetRef": "[concat(variables('VnetID'),'/subnets/',variables('subnetNames').staticSubnetName)]",
@@ -716,7 +600,7 @@
     "derivedIds": {
       "dcNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('DCNSGName'))]",
       "sqlNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('SQLNSGName'))]",
-      "delNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('DELNSGName'))]",
+      "webNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('webNSGName'))]",
       "lbNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('LBNSGName'))]",
       "mgtNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('MGTNSGName'))]",
       "adIPConfigID": "[concat(variables('ids').adNicId,'/ipConfigurations/ipconfig1')]",
@@ -765,7 +649,7 @@
     "resourceNames": {
       "sqlStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('environment'))]",
       "dcStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('environment'))]",
-      "DELStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'del', parameters('environment'))]",
+      "WebStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'web', parameters('environment'))]",
       "MGTStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environment'))]",
       "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('environment'))]"
     },
@@ -826,8 +710,8 @@
           "sqlNSGName": {
             "value": "[variables('SQLNSGName')]"
           },
-          "delNSGName": {
-            "value": "[variables('DELNSGName')]"
+          "webNSGName": {
+            "value": "[variables('webNSGName')]"
           },
           "mgtNSGName": {
             "value": "[variables('MGTNSGName')]"
@@ -1490,29 +1374,29 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "numberOfDELInstances": {
-            "value": "[variables('numberOfDELInstances')]",
+          "numberOfWebInstances": {
+            "value": "[variables('numberOfWebInstances')]",
           },
-          "DELVMName": {
-            "value": "[variables('vmSettings').DELVMName]"
+          "WebVMName": {
+            "value": "[variables('vmSettings').WebVMName]"
           },
           "MGTVMName": {
             "value": "[variables('vmSettings').MGTVMName]"
           },
-          "DELAvailabilitySetName": {
-            "value": "[variables('vmSettings').availabilitySets.DELAvailabilitySetName]"
+          "WebAvailabilitySetName": {
+            "value": "[variables('vmSettings').availabilitySets.WebAvailabilitySetName]"
           },
           "MGTAvailabilitySetName": {
             "value": "[variables('vmSettings').availabilitySets.MGTAvailbilitySetName]"
           },
-          "DELStorageAccountName": {
-            "value": "[variables('resourceNames').DELStorageAccountName]"
+          "WebStorageAccountName": {
+            "value": "[variables('resourceNames').WebStorageAccountName]"
           },
           "MGTStorageAccountName": {
             "value": "[variables('resourceNames').MGTStorageAccountName]"
           },
-          "DELStorageAccountType": {
-            "value": "[parameters('DELStorageAccountType')]"
+          "WebStorageAccountType": {
+            "value": "[parameters('WebStorageAccountType')]"
           },
           "MGTStorageAccountType": {
             "value": "[parameters('MGTStorageAccountType')]"
@@ -1520,8 +1404,8 @@
           "location": {
             "value": "[resourceGroup().location]"
           },
-          "DELVMSize": {
-            "value": "[parameters('DELVMSize')]"
+          "WebVMSize": {
+            "value": "[parameters('WebVMSize')]"
           },
           "MGTVMSize": {
             "value": "[parameters('MGTVMSize')]"
@@ -1544,8 +1428,8 @@
           "vmContainerName": {
             "value": "[variables('vmSettings').vmContainerName]"
           },
-          "DELNICName": {
-            "value": "[variables('DELNICName')]"
+          "WEBNICName": {
+            "value": "[variables('WEBNICName')]"
           },
           "MGTNICName": {
             "value": "[variables('MGTNICName')]"
@@ -1559,8 +1443,8 @@
           "mgtNSGid": {
             "value": "[variables('derivedIds').mgtNSG]"
           },
-          "delNSGid": {
-            "value": "[variables('derivedIds').delNSG]"
+          "webNSGid": {
+            "value": "[variables('derivedIds').webNSG]"
           },
           "domainName": {
             "value": "[parameters('domainName')]"
@@ -1574,8 +1458,8 @@
           "iisConfigurationFunction": {
             "value": "[variables('configuration').iisConfigurationFunction]"
           },
-          "staticIPDELStart": {
-            "value": "[variables('staticIPDELStart')]"
+          "staticIPWEBStart": {
+            "value": "[variables('staticIPWEBStart')]"
           }
         }
       }
