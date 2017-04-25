@@ -26,12 +26,6 @@
     "delNSGName": {
       "type": "string"
     },
-    "cfgNSGName": {
-      "type": "string"
-    },
-    "shrNSGName": {
-      "type": "string"
-    },
     "mgtNSGName": {
       "type": "string"
     },
@@ -487,63 +481,9 @@
         "dependsOn": []
     },
     {
-        "comments": "CFG NSG",
-        "type": "Microsoft.Network/networkSecurityGroups",
-        "name": "[parameters('cfgNSGName')]",
-        "apiVersion": "2016-03-30",
-        "location": "[parameters('location')]",
-        "properties": {
-            "securityRules": [
-
-                {
-                    "name": "RDP",
-                    "properties": {
-                        "protocol": "TCP",
-                        "sourcePortRange": "*",
-                        "destinationPortRange": "3389",
-                        "sourceAddressPrefix": "*",
-                        "destinationAddressPrefix": "*",
-                        "access": "Allow",
-                        "priority": 102,
-                        "direction": "Inbound"
-                    }
-                }
-            ]
-        },
-        "resources": [],
-        "dependsOn": []
-    },
-    {
         "comments": "DEL NSG",
         "type": "Microsoft.Network/networkSecurityGroups",
         "name": "[parameters('delNSGName')]",
-        "apiVersion": "2016-03-30",
-        "location": "[parameters('location')]",
-        "properties": {
-            "securityRules": [
-
-                {
-                    "name": "RDP",
-                    "properties": {
-                        "protocol": "TCP",
-                        "sourcePortRange": "*",
-                        "destinationPortRange": "3389",
-                        "sourceAddressPrefix": "*",
-                        "destinationAddressPrefix": "*",
-                        "access": "Allow",
-                        "priority": 102,
-                        "direction": "Inbound"
-                    }
-                }
-            ]
-        },
-        "resources": [],
-        "dependsOn": []
-    },
-    {
-        "comments": "SHR NSG",
-        "type": "Microsoft.Network/networkSecurityGroups",
-        "name": "[parameters('shrNSGName')]",
         "apiVersion": "2016-03-30",
         "location": "[parameters('location')]",
         "properties": {

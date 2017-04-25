@@ -258,7 +258,7 @@
           "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('MGTAvailabilitySetName'))]"
         },
         "osProfile": {
-          "computername": "[replace(parameters('CFGVMName'),'-','')]",
+          "computername": "[replace(parameters('MGTVMName'),'-','')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },

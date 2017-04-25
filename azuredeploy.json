@@ -38,10 +38,6 @@
       "type": "string",
       "defaultValue": ""
     },
-    "nsgName": {
-      "type": "string",
-      "defaultValue": "NSG"
-    },
     "numberOfDELInstances": {
       "type": "int",
       "defaultValue": 2,
@@ -642,9 +638,6 @@
     }
   },
   "variables": {
-    "suffixes": {
-      "storageAccounts": "sa"
-    },
     "lbSettings": {
       "rdpLBFE": "rdpLBFE",
       "sqlLBFE": "sqlLBFE",
@@ -664,10 +657,8 @@
     "DCNSGName": "[concat('DCNSG', parameters('environment'))]",
     "DELNSGName": "[concat('DELNSG', parameters('environment'))]",
     "SQLNSGName": "[concat('SQLNSG', parameters('environment'))]",
-    "CFGNSGName": "[concat('CFGNSG', parameters('environment'))]",
-    "SHRNSGName": "[concat('SHRNSG', parameters('environment'))]",
     "LBNSGName": "[concat('LBNSG', parameters('environment'))]",
-    "numberOfWebInstances": "[length(parameters('DELNICIPAddresses'))]",
+    "numberOfDELInstances": "[length(parameters('DELNICIPAddresses'))]",
     "numberOfSHRInstances": "[length(parameters('SHRNICIPAddresses'))]",
     "staticIPSHRStart": 6,
     "staticIPDELStart": "[add(variables('staticIPSHRStart'), variables('numberOfSHRInstances'))]",
@@ -681,9 +672,7 @@
       "availabilitySets": {
         "sqlAvailabilitySetName": "[concat('sqlAvailabilitySet', parameters('environment'))]",
         "adAvailabilitySetName": "[concat('adAvailabilitySet-', parameters('environment'))]",
-        "SHRAvailabilitySetName": "[concat('SHR_AvailabilitySet-', parameters('environment'))]",
         "DELAvailabilitySetName": "[concat('DEL_AvailabilitySet-', parameters('environment'))]",
-        "CFGAvailabilitySetName": "[concat('CFG_AvailabilitySet-', parameters('environment'))]",
         "MGTAvailbilitySetName": "[concat('MGT_AvailabilitySet-', parameters('environment'))]"
       },
       "noOfSqlVMs": 2,
@@ -692,9 +681,7 @@
       "adBDCVMName": "[concat('AZ-BDC-VM-', parameters('environment'))]",
       "sqlVMName": "[concat(parameters('environment'), 'sqlserver-')]",
       "sqlwVMName": "[concat('cluster-fsw', parameters('environment'))]",
-      "SHRVMName": "[concat('AZ-SHR-VM', parameters('environment'))]",
       "DELVMName": "[concat('AZ-DEL-VM', parameters('environment'))]",
-      "CFGVMName": "[concat('AZ-CFG-VM', parameters('environment'))]",
       "MGTVMName": "[concat('AZ-MGT-VM', parameters('environment'))]",
       "windowsImagePublisher": "MicrosoftWindowsServer",
       "windowsImageOffer": "WindowsServer",
@@ -714,9 +701,7 @@
     "adBDCNicName": "[concat('adBDC-nic', parameters('environment'))]",
     "sqlwNicName": "[concat('sqlw-nic', parameters('environment'))]",
     "sqlNicName": "[concat('sql-nic', parameters('environment'))]",
-    "SHRNICName": "[concat('SHR-nic', parameters('environment'))]",
     "DELNICName": "[concat('DEL-nic', parameters('environment'))]",
-    "CFGNICName": "[concat('CFG-nic', parameters('environment'))]",
     "MGTNICName": "[concat('MGT-nic', parameters('environment'))]",
     "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkNameWithSuffix'))]",
     "staticSubnetRef": "[concat(variables('VnetID'),'/subnets/',variables('subnetNames').staticSubnetName)]",
@@ -732,8 +717,6 @@
       "dcNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('DCNSGName'))]",
       "sqlNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('SQLNSGName'))]",
       "delNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('DELNSGName'))]",
-      "shrNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('SHRNSGName'))]",
-      "cfgNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('CFGNSGName'))]",
       "lbNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('LBNSGName'))]",
       "mgtNSG": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('MGTNSGName'))]",
       "adIPConfigID": "[concat(variables('ids').adNicId,'/ipConfigurations/ipconfig1')]",
@@ -776,27 +759,15 @@
         "properties": {
           "addressPrefix": "[parameters('gatewaySubnet')]"
         }
-      },
-      {
-        "name": "[variables('subnetNames').appGatewaySubnetName]",
-        "properties": {
-          "addressPrefix": "[parameters('appGatewaySubnet')]",
-          "networkSecurityGroup": {
-            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('lbNSGName'))]"
-          }
-        }
       }
     ],
     "virtualNetworkNameWithSuffix": "[concat(parameters('virtualNetworkName'), uniqueString(resourceGroup().id))]",
     "resourceNames": {
       "sqlStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'sql', parameters('environment'))]",
       "dcStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'dc', parameters('environment'))]",
-      "SHRStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'shr', parameters('environment'))]",
       "DELStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'del', parameters('environment'))]",
-      "CFGStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'cfg', parameters('environment'))]",
       "MGTStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'mgt', parameters('environment'))]",
-      "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('environment'))]",
-      "applicationGatewayName": "[concat('applicationGateway1', parameters('environment'))]"
+      "appDiagStorageAccountName": "[concat(uniqueString(resourceGroup().id), 'diag', parameters('environment'))]"
     },
     "configuration": {
       "vnetwithDNSTemplateURL": "[concat(parameters('templatesBaseUrl'),'/updateVnetWithDNS.json', parameters('sasTokenTemplates'))]",
@@ -840,9 +811,6 @@
           "location": {
             "value": "[resourceGroup().location]"
           },
-          "nsgName": {
-            "value": "[parameters('nsgName')]"
-          },
           "virtualNetworkName": {
             "value": "[variables('virtualNetworkNameWithSuffix')]"
           },
@@ -860,12 +828,6 @@
           },
           "delNSGName": {
             "value": "[variables('DELNSGName')]"
-          },
-          "cfgNSGName": {
-            "value": "[variables('CFGNSGName')]"
-          },
-          "shrNSGName": {
-            "value": "[variables('SHRNSGName')]"
           },
           "mgtNSGName": {
             "value": "[variables('MGTNSGName')]"
@@ -1529,7 +1491,7 @@
         },
         "parameters": {
           "numberOfDELInstances": {
-            "value": "[parameters('numberOfDELInstances')]",
+            "value": "[variables('numberOfDELInstances')]",
           },
           "DELVMName": {
             "value": "[variables('vmSettings').DELVMName]"
