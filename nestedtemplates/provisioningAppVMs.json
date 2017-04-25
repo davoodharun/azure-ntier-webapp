@@ -83,7 +83,7 @@
     "subnetRef": {
       "type": "string"
     },
-    "staticIPDELStart": {
+    "staticIPWEBStart": {
       "type": "int"
     },
     "webNSGid": {
@@ -152,7 +152,7 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[concat('10.200.0.', add(copyindex(), parameters('staticIPDELStart')))]",
+              "privateIPAddress": "[concat('10.200.0.', add(copyindex(), parameters('staticIPWEBStart')))]",
               "subnet": {
                 "id": "[parameters('subnetRef')]"
               }
