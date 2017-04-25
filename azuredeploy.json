@@ -48,7 +48,7 @@
       "minValue": 2,
       "maxValue": 5
     },
-    "numberOfDELInstances": {
+    "numberOfWebInstances": {
       "type": "int",
       "defaultValue": 2,
       "minValue": 2,
@@ -522,14 +522,14 @@
       "metadata": {
         "description": "Linked Templates base url"
       },
-      "defaultValue": "https://github.com/davoodharun/azure-ntier-webapp/nestedtemplates"
+      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/nestedtemplates"
     },
     "scriptsBaseUrl": {
       "type": "string",
       "metadata": {
         "description": "DSC Scripts base url"
       },
-      "defaultValue": "https://github.com/davoodharun/azure-ntier-webapp/DSC"
+      "defaultValue": "https://raw.githubusercontent.com/davoodharun/azure-ntier-webapp/master/DSC"
     },
     "autoPatchingDay": {
       "type": "string",
@@ -667,7 +667,7 @@
     "CFGNSGName": "[concat('CFGNSG', parameters('environment'))]",
     "SHRNSGName": "[concat('SHRNSG', parameters('environment'))]",
     "LBNSGName": "[concat('LBNSG', parameters('environment'))]",
-    "numberOfDELInstances": "[length(parameters('DELNICIPAddresses'))]",
+    "numberOfWebInstances": "[length(parameters('DELNICIPAddresses'))]",
     "numberOfSHRInstances": "[length(parameters('SHRNICIPAddresses'))]",
     "staticIPSHRStart": 6,
     "staticIPDELStart": "[add(variables('staticIPSHRStart'), variables('numberOfSHRInstances'))]",
@@ -1399,7 +1399,7 @@
             "value": "[parameters('sqlServerServiceAccountUserName')]"
           },
           "sqlServerServiceAccountPassword": {
-            "value": "[parameters('sqlServerServicePassword')]"
+            "value": "[parameters('sqlServerServiceAccountPassword')]"
           },
           "sharePath": {
             "value": "[variables('sharePath')]"
@@ -1470,7 +1470,7 @@
             "value": "[parameters('sqlServerServiceAccountUserName')]"
           },
           "sqlServerServiceAccountPassword": {
-            "value": "[parameters('sqlServerServicePassword')]"
+            "value": "[parameters('sqlServerServiceAccountPassword')]"
           },
           "createClusterModulesURL": {
             "value": "[variables('configuration').createClusterModulesURL]"
@@ -1510,6 +1510,166 @@
           },
           "workloadType": {
             "value": "[parameters('workloadType')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "ProvisioningApplicationVMs",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/ConfiguringAlwaysOn"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('configuration').provisioningAppVMsURL]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "numberOfSHRInstances": {
+            "value": "[parameters('numberOfSHRInstances')]",
+          },
+          "numberOfDELInstances": {
+            "value": "[parameters('numberOfDELInstances')]",
+          },
+          "SHRVMName": {
+            "value": "[variables('vmSettings').SHRVMName]"
+          },
+          "DELVMName": {
+            "value": "[variables('vmSettings').DELVMName]"
+          },
+          "CFGVMName": {
+            "value": "[variables('vmSettings').CFGVMName]"
+          },
+          "MGTVMName": {
+            "value": "[variables('vmSettings').MGTVMName]"
+          },
+          "SHRAvailabilitySetName": {
+            "value": "[variables('vmSettings').availabilitySets.SHRAvailabilitySetName]"
+          },
+          "DELAvailabilitySetName": {
+            "value": "[variables('vmSettings').availabilitySets.DELAvailabilitySetName]"
+          },
+          "CFGAvailabilitySetName": {
+            "value": "[variables('vmSettings').availabilitySets.CFGAvailabilitySetName]"
+          },
+          "MGTAvailabilitySetName": {
+            "value": "[variables('vmSettings').availabilitySets.MGTAvailbilitySetName]"
+          },
+          "SHRStorageAccountName": {
+            "value": "[variables('resourceNames').SHRStorageAccountName]"
+          },
+          "DELStorageAccountName": {
+            "value": "[variables('resourceNames').DELStorageAccountName]"
+          },
+          "CFGStorageAccountName": {
+            "value": "[variables('resourceNames').CFGStorageAccountName]"
+          },
+          "MGTStorageAccountName": {
+            "value": "[variables('resourceNames').MGTStorageAccountName]"
+          },
+          "SHRStorageAccountType": {
+            "value": "[parameters('SHRStorageAccountType')]"
+          },
+          "DELStorageAccountType": {
+            "value": "[parameters('DELStorageAccountType')]"
+          },
+          "CFGStorageAccountType": {
+            "value": "[parameters('CFGStorageAccountType')]"
+          },
+          "MGTStorageAccountType": {
+            "value": "[parameters('MGTStorageAccountType')]"
+          },
+          "location": {
+            "value": "[resourceGroup().location]"
+          },
+          "SHRVMSize": {
+            "value": "[parameters('SHRVMSize')]"
+          },
+          "DELVMSize": {
+            "value": "[parameters('DELVMSize')]"
+          },
+          "CFGVMSize": {
+            "value": "[parameters('CFGVMSize')]"
+          },
+          "MGTVMSize": {
+            "value": "[parameters('MGTVMSize')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[variables('keyVaultId')]"
+              },
+              "secretName": "adminPassword"
+            }
+          },
+          "appImagePublisher": {
+            "value": "[variables('vmSettings').windowsImagePublisher]"
+          },
+          "appImageOffer": {
+            "value": "[variables('vmSettings').windowsImageOffer]"
+          },
+          "appImageSKU": {
+            "value": "[variables('vmSettings').windowsImageSKU]"
+          },
+          "vmContainerName": {
+            "value": "[variables('vmSettings').vmContainerName]"
+          },
+          "SHRNICName": {
+            "value": "[variables('SHRNICName')]"
+          },
+          "DELNICName": {
+            "value": "[variables('DELNICName')]"
+          },
+          "CFGNICName": {
+            "value": "[variables('CFGNICName')]"
+          },
+          "MGTNICName": {
+            "value": "[variables('MGTNICName')]"
+          },
+          "CFGNICIPAddress": {
+            "value": "[parameters('CFGNICIPAddress')]"
+          },
+          "MGTNICIPAddress": {
+            "value": "[parameters('MGTNICIPAddress')]"
+          },
+          "subnetRef": {
+            "value": "[variables('appSubnetRef')]"
+          },
+          "mgtNSGid": {
+            "value": "[variables('derivedIds').mgtNSG]"
+          },
+          "delNSGid": {
+            "value": "[variables('derivedIds').delNSG]"
+          },
+          "shrNSGid": {
+            "value": "[variables('derivedIds').shrNSG]"
+          },
+          "cfgNSGid": {
+            "value": "[variables('derivedIds').cfgNSG]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "domainJoinUserName": {
+            "value": "[parameters('domainJoinUserName')]"
+          },
+          "iisModulesURL": {
+            "value": "[variables('configuration').iisModulesURL]"
+          },
+          "iisConfigurationFunction": {
+            "value": "[variables('configuration').iisConfigurationFunction]"
+          },
+          "staticIPSHRStart": {
+            "value": "[variables('staticIPSHRStart')]"
+          },
+          "staticIPDELStart": {
+            "value": "[variables('staticIPDELStart')]"
           }
         }
       }
