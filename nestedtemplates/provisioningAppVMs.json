@@ -2,61 +2,31 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "numberOfSHRInstances": {
-      "type": "int",
-      "defaultValue": 2,
-      "minValue": 2,
-      "maxValue": 5
-    },
     "numberOfDELInstances": {
       "type": "int",
       "defaultValue": 2,
       "minValue": 2,
       "maxValue": 5
     },
-    "SHRVMName": {
-      "type": "string"
-    },
     "DELVMName": {
-      "type": "string"
-    },
-    "CFGVMName": {
       "type": "string"
     },
     "MGTVMName": {
       "type": "string"
     },
-    "SHRAvailabilitySetName": {
-      "type": "string"
-    },
     "DELAvailabilitySetName": {
-      "type": "string"
-    },
-    "CFGAvailabilitySetName": {
       "type": "string"
     },
     "MGTAvailabilitySetName": {
       "type": "string"
     },
-    "SHRStorageAccountName": {
-      "type": "string"
-    },
     "DELStorageAccountName": {
-      "type": "string"
-    },
-    "CFGStorageAccountName": {
       "type": "string"
     },
     "MGTStorageAccountName": {
       "type": "string"
     },
-    "SHRStorageAccountType": {
-      "type": "string"
-    },
     "DELStorageAccountType": {
-      "type": "string"
-    },
-    "CFGStorageAccountType": {
       "type": "string"
     },
     "MGTStorageAccountType": {
@@ -65,31 +35,16 @@
     "location": {
       "type": "string"
     },
-    "SHRVMSize": {
-      "type": "string"
-    },
     "DELVMSize": {
-      "type": "string"
-    },
-    "CFGVMSize": {
       "type": "string"
     },
     "MGTVMSize": {
       "type": "string"
     },
-    "SHRNICName": {
-      "type": "string"
-    },
     "DELNICName": {
       "type": "string"
     },
-    "CFGNICName": {
-      "type": "string"
-    },
     "MGTNICName": {
-      "type": "string"
-    },
-    "CFGNICIPAddress": {
       "type": "string"
     },
     "MGTNICIPAddress": {
@@ -128,22 +83,13 @@
     "subnetRef": {
       "type": "string"
     },
-    "staticIPSHRStart": {
-      "type": "int"
-    },
     "staticIPDELStart": {
       "type": "int"
-    },
-    "shrNSGid": {
-      "type": "string"
     },
     "delNSGid": {
       "type": "string"
     },
     "mgtNSGid": {
-      "type": "string"
-    },
-    "cfgNSGid": {
       "type": "string"
     }
   },
